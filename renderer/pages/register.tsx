@@ -17,6 +17,7 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import BadgeIcon from '@mui/icons-material/Badge';
 import { CSSTransition } from 'react-transition-group';
+import axios from 'axios';
 
 interface FormElements extends HTMLFormControlsCollection {
   email: HTMLInputElement;
@@ -53,7 +54,32 @@ function ColorSchemeToggle(props: IconButtonProps) {
   );
 }
 
-export default function Next() {
+export default function Register() {
+  const [errorMessage, setErrorMessage] = React.useState('');
+
+  const handleRegister = async (event: React.FormEvent<SignInFormElement>) => {
+    event.preventDefault();
+    const formElements = event.currentTarget.elements;
+    const data = {
+      email: formElements.email.value,
+      username: formElements.username.value,
+      password: formElements.password.value,
+    };
+
+    try {
+      const response = await axios.post('http://localhost:3000/api/auth/register', data);
+      if (response.data.success) {
+        setErrorMessage('');
+        window.location.href = '/login';
+      } else {
+        setErrorMessage(response.data.message || 'Registration failed');
+      }
+    } catch (error) {
+      setErrorMessage('Registration failed');
+      console.error('Registration error:', error);
+    }
+  };
+
   return (
     <CSSTransition in={true} appear={true} timeout={300} classNames="fade">
       <CssVarsProvider defaultMode="dark" disableTransitionOnChange>
@@ -137,7 +163,7 @@ export default function Next() {
                   </Typography>
                   <Typography level="body-sm">
                     Do you already have an account?{' '}
-                    <Link href="/home" level="title-sm">
+                    <Link href="/login" level="title-sm">
                       Sign in!
                     </Link>
                   </Typography>
@@ -150,20 +176,13 @@ export default function Next() {
                   },
                 })}
               />
+              {errorMessage && (
+                <Typography level="body-sm" color="danger">
+                  {errorMessage}
+                </Typography>
+              )}
               <Stack gap={4} sx={{ mt: 2 }}>
-                <form
-                  onSubmit={(event: React.FormEvent<SignInFormElement>) => {
-                    event.preventDefault();
-                    const formElements = event.currentTarget.elements;
-                    const data = {
-                      email: formElements.email.value,
-                      username: formElements.username.value,
-                      password: formElements.password.value,
-                      persistent: formElements.persistent.checked,
-                    };
-                    alert(JSON.stringify(data, null, 2));
-                  }}
-                >
+                <form onSubmit={handleRegister}>
                   <FormControl required>
                     <FormLabel>Email</FormLabel>
                     <Input type="email" name="email" />
@@ -185,7 +204,7 @@ export default function Next() {
                       }}
                     >
                       <Checkbox size="sm" label="Remember me" name="persistent" />
-                      <Link level="title-sm" href="/forgotpassword">
+                      <Link level="title-sm" href="/forgot-password">
                         Forgot your password?
                       </Link>
                     </Box>

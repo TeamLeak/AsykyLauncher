@@ -17,9 +17,12 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import BadgeIcon from '@mui/icons-material/Badge';
 import { CSSTransition } from 'react-transition-group';
+import axios from 'axios';
 
 interface FormElements extends HTMLFormControlsCollection {
-  email: HTMLInputElement;
+  username: HTMLInputElement;
+  password: HTMLInputElement;
+  persistent: HTMLInputElement;
 }
 
 interface SignInFormElement extends HTMLFormElement {
@@ -50,7 +53,32 @@ function ColorSchemeToggle(props: IconButtonProps) {
   );
 }
 
-export default function ForgotPassword() {
+export default function Login() {
+  const [errorMessage, setErrorMessage] = React.useState('');
+
+  const handleLogin = async (event: React.FormEvent<SignInFormElement>) => {
+    event.preventDefault();
+    const formElements = event.currentTarget.elements;
+    const data = {
+      username: formElements.username.value,
+      password: formElements.password.value,
+    };
+
+    try {
+      const response = await axios.post('http://localhost:3000/api/auth/login', data);
+      if (response.data.success) {
+        setErrorMessage('');
+        // handle successful login, e.g., redirect to dashboard
+        window.location.href = '/dashboard';
+      } else {
+        setErrorMessage(response.data.message || 'Login failed');
+      }
+    } catch (error) {
+      setErrorMessage('Login failed');
+      console.error('Login error:', error);
+    }
+  };
+
   return (
     <CSSTransition in={true} appear={true} timeout={300} classNames="fade">
       <CssVarsProvider defaultMode="dark" disableTransitionOnChange>
@@ -130,12 +158,12 @@ export default function ForgotPassword() {
               <Stack gap={4} sx={{ mb: 2 }}>
                 <Stack gap={1}>
                   <Typography component="h1" level="h3">
-                    Forgot Password
+                    Sign in
                   </Typography>
                   <Typography level="body-sm">
-                    Remembered password?{' '}
-                    <Link href="/home" level="title-sm">
-                      Sign in!
+                    Don't have account?{' '}
+                    <Link href="/register" level="title-sm">
+                      Sign up!
                     </Link>
                   </Typography>
                 </Stack>
@@ -147,31 +175,36 @@ export default function ForgotPassword() {
                   },
                 })}
               />
+              {errorMessage && (
+                <Typography level="body-sm" color="danger">
+                  {errorMessage}
+                </Typography>
+              )}
               <Stack gap={4} sx={{ mt: 2 }}>
-                <form
-                  onSubmit={(event: React.FormEvent<SignInFormElement>) => {
-                    event.preventDefault();
-                    const formElements = event.currentTarget.elements;
-                    const data = {
-                      email: formElements.email.value,
-                    };
-                    alert(JSON.stringify(data, null, 2));
-                  }}
-                >
+                <form onSubmit={handleLogin}>
                   <FormControl required>
-                    <FormLabel>Email</FormLabel>
-                    <Input type="email" name="email" />
+                    <FormLabel>Username</FormLabel>
+                    <Input type="username" name="username" />
                   </FormControl>
-                  <Stack gap={2} sx={{ mt: 2 }}>
+                  <FormControl required>
+                    <FormLabel>Password</FormLabel>
+                    <Input type="password" name="password" />
+                  </FormControl>
+                  <Stack gap={4} sx={{ mt: 2 }}>
                     <Box
                       sx={{
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'center',
                       }}
-                    />
+                    >
+                      <Checkbox size="sm" label="Remember me" name="persistent" />
+                      <Link level="title-sm" href="/forgot-password">
+                        Forgot your password?
+                      </Link>
+                    </Box>
                     <Button type="submit" fullWidth>
-                      Restore
+                      Sign in
                     </Button>
                   </Stack>
                 </form>

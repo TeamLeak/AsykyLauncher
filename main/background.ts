@@ -1,15 +1,16 @@
 import path from 'path';
-import {app, ipcMain, BrowserWindow} from 'electron';
+import { app, ipcMain, BrowserWindow } from 'electron';
 import serve from 'electron-serve';
-import {createWindow} from './helpers';
-import {createUserFolder} from './createUserFolder';
-import {getAllSessions, saveSession, loadSession} from './sessionManager';
-import {SessionData} from './sessionTypes';
+import { createWindow } from './helpers';
+import { createUserFolder } from './createUserFolder';
+import { getAllSessions, loadSession } from './sessionManager';
+import { launchGame } from './launchGame';
+import { SessionData } from './sessionTypes';
 
 const isProd = process.env.NODE_ENV === 'production';
 
 if (isProd) {
-    serve({directory: 'app'});
+    serve({ directory: 'app' });
 } else {
     app.setPath('userData', `${app.getPath('userData')} (development)`);
 }
@@ -27,16 +28,16 @@ const createMainWindow = () => {
     });
 
     if (isProd) {
-        mainWindow.loadURL('app://./home');
+        mainWindow.loadURL('/login');
     } else {
         const port = process.argv[2];
-        mainWindow.loadURL(`http://localhost:${port}/home`);
+        mainWindow.loadURL(`http://localhost:${port}/login`);
         mainWindow.webContents.openDevTools();
     }
 };
 
 app.on('ready', async () => {
-    const {launcherFolderPath, sessionFolderPath} = createUserFolder();
+    const { launcherFolderPath, sessionFolderPath } = createUserFolder();
     console.log(`Launcher folder created at: ${launcherFolderPath}`);
     console.log(`Session folder created at: ${sessionFolderPath}`);
 
@@ -59,6 +60,7 @@ app.on('ready', async () => {
                 console.log(`Session selected: ${sessionData.username}`);
                 createMainWindow();
                 selectionWindow.close();
+                launchGame();
             }
         });
 
@@ -66,9 +68,11 @@ app.on('ready', async () => {
             console.log('Creating new session');
             createMainWindow();
             selectionWindow.close();
+            launchGame();
         });
     } else {
         createMainWindow();
+        launchGame();
     }
 });
 
