@@ -5,7 +5,8 @@ import { createWindow } from './helpers';
 import { createUserFolder } from './createUserFolder';
 import { getAllSessions, loadSession } from './sessionManager';
 import { launchGame } from './launchGame';
-import { SessionData } from './sessionTypes';
+import fs from 'fs';
+import {LAUNCHER_NAME} from "./constants";
 
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -23,15 +24,16 @@ const createMainWindow = () => {
         height: 600,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
+            contextIsolation: true,
         },
         autoHideMenuBar: true,
     });
 
     if (isProd) {
-        mainWindow.loadURL('/login');
+        mainWindow.loadURL('app://./index.html');
     } else {
         const port = process.argv[2];
-        mainWindow.loadURL(`http://localhost:${port}/login`);
+        mainWindow.loadURL(`http://localhost:${port}/`);
         mainWindow.webContents.openDevTools();
     }
 };
@@ -41,6 +43,11 @@ app.on('ready', async () => {
     console.log(`Launcher folder created at: ${launcherFolderPath}`);
     console.log(`Session folder created at: ${sessionFolderPath}`);
 
+    const settingsFolderPath = path.join(launcherFolderPath, 'settings');
+    if (!fs.existsSync(settingsFolderPath)) {
+        fs.mkdirSync(settingsFolderPath, { recursive: true });
+    }
+
     const sessions = getAllSessions();
 
     if (sessions.length > 0) {
@@ -49,6 +56,7 @@ app.on('ready', async () => {
             height: 300,
             webPreferences: {
                 preload: path.join(__dirname, 'preload.js'),
+                contextIsolation: true,
             },
         });
 
@@ -80,6 +88,28 @@ app.on('window-all-closed', () => {
     app.quit();
 });
 
-ipcMain.on('message', async (event, arg) => {
-    event.reply('message', `${arg} World!`);
+ipcMain.handle('load-settings', async () => {
+    const settingsPath = path.join(app.getPath('userData'), `.${LAUNCHER_NAME}`, 'settings', 'settings.json');
+    try {
+        if (fs.existsSync(settingsPath)) {
+            const data = fs.readFileSync(settingsPath, 'utf-8');
+            return JSON.parse(data);
+        } else {
+            return { maxRAM: 4, minRAM: 2, javaExecutable: '' };
+        }
+    } catch (error) {
+        console.log('Error loading settings:', error);
+        return { maxRAM: 4, minRAM: 2, javaExecutable: '' };
+    }
+});
+
+ipcMain.handle('save-settings', async (event, settings) => {
+    const settingsPath = path.join(app.getPath('userData'), `.${LAUNCHER_NAME}`, 'settings', 'settings.json');
+    try {
+        fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2), 'utf-8');
+        return true;
+    } catch (error) {
+        console.log('Error saving settings:', error);
+        return false;
+    }
 });

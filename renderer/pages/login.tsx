@@ -68,7 +68,6 @@ export default function Login() {
       const response = await axios.post('http://localhost:3000/api/auth/login', data);
       if (response.data.success) {
         setErrorMessage('');
-        // handle successful login, e.g., redirect to dashboard
         window.location.href = '/dashboard';
       } else {
         setErrorMessage(response.data.message || 'Login failed');
