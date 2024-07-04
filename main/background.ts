@@ -6,7 +6,8 @@ import { createUserFolder } from './createUserFolder';
 import { getAllSessions, loadSession } from './sessionManager';
 import { launchGame } from './launchGame';
 import fs from 'fs';
-import {LAUNCHER_NAME} from "./constants";
+import Store from 'electron-store';
+import { LAUNCHER_NAME } from './constants';
 
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -17,6 +18,8 @@ if (isProd) {
 }
 
 let mainWindow: BrowserWindow | null;
+
+const store = new Store();
 
 const createMainWindow = () => {
     mainWindow = createWindow('main', {
@@ -30,7 +33,7 @@ const createMainWindow = () => {
     });
 
     if (isProd) {
-        mainWindow.loadURL('app://./index.html');
+        mainWindow.loadURL('/');
     } else {
         const port = process.argv[2];
         mainWindow.loadURL(`http://localhost:${port}/`);
@@ -112,4 +115,12 @@ ipcMain.handle('save-settings', async (event, settings) => {
         console.log('Error saving settings:', error);
         return false;
     }
+});
+
+ipcMain.handle('get-store-value', (event, key) => {
+    return store.get(key);
+});
+
+ipcMain.handle('set-store-value', (event, key, value) => {
+    store.set(key, value);
 });

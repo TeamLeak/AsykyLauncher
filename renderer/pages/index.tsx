@@ -24,18 +24,34 @@ const HomePage: React.FC = () => {
   };
 
   const handleSettingsClick = () => {
-    // Navigate to settings page
     window.location.href = '/settings';
   };
 
   const handleAccountClick = () => {
-    // Navigate to account page
     window.location.href = '/account';
   };
 
   const handleLoginClick = () => {
-    // Navigate to login page
     window.location.href = '/login';
+  };
+
+  const saveUsername = async () => {
+    const username = (document.getElementById('username') as HTMLInputElement).value;
+    if (window.electron && window.electron.setStoreValue) {
+      await window.electron.setStoreValue('username', username);
+      alert('Username saved!');
+    } else {
+      console.error('electronAPI is not available');
+    }
+  };
+
+  const loadUsername = async () => {
+    if (window.electron && window.electron.getStoreValue) {
+      const username = await window.electron.getStoreValue('username');
+      alert(`Loaded Username: ${username}`);
+    } else {
+      console.error('electronAPI is not available');
+    }
   };
 
   return (
@@ -75,21 +91,21 @@ const HomePage: React.FC = () => {
           <Stack direction="row" spacing={1} alignItems="center" justifyContent="center" sx={{ flex: 1 }}>
             <IconButton
               variant="outlined"
-              color="inherit"
+              color="primary"
               onClick={() => handleIconClick('https://twitter.com')}
             >
               <TwitterIcon />
             </IconButton>
             <IconButton
               variant="outlined"
-              color="inherit"
+              color="primary"
               onClick={() => handleIconClick('https://instagram.com')}
             >
               <InstagramIcon />
             </IconButton>
             <IconButton
               variant="outlined"
-              color="inherit"
+              color="primary"
               onClick={() => handleIconClick('https://youtube.com')}
             >
               <YouTubeIcon />
@@ -98,21 +114,21 @@ const HomePage: React.FC = () => {
           <Stack direction="row" spacing={1} alignItems="center">
             <IconButton
               variant="outlined"
-              color="inherit"
+              color="primary"
               onClick={handleSettingsClick}
             >
               <SettingsIcon />
             </IconButton>
             <IconButton
               variant="outlined"
-              color="inherit"
+              color="primary"
               onClick={handleAccountClick}
             >
               <AccountCircleIcon />
             </IconButton>
             <IconButton
               variant="outlined"
-              color="inherit"
+              color="primary"
               onClick={handleLoginClick}
             >
               <LoginIcon />
@@ -150,6 +166,11 @@ const HomePage: React.FC = () => {
             <Typography level="body-md" mt={2}>
               Players: 0/100 | Mojang Status: <span style={{ color: 'red' }}>Offline</span>
             </Typography>
+            <Box sx={{ mt: 4 }}>
+              <input id="username" type="text" placeholder="Username" style={{ padding: '10px', fontSize: '1rem' }} />
+              <Button onClick={saveUsername} sx={{ ml: 2 }}>Save Username</Button>
+              <Button onClick={loadUsername} sx={{ ml: 2 }}>Load Username</Button>
+            </Box>
           </Box>
         </Box>
       </Box>
