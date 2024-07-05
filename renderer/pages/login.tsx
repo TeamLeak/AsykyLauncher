@@ -17,229 +17,228 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import BadgeIcon from '@mui/icons-material/Badge';
 import { CSSTransition } from 'react-transition-group';
-import axios from 'axios';
 
 interface FormElements extends HTMLFormControlsCollection {
-  username: HTMLInputElement;
-  password: HTMLInputElement;
-  persistent: HTMLInputElement;
+    username: HTMLInputElement;
+    password: HTMLInputElement;
+    persistent: HTMLInputElement;
 }
 
 interface SignInFormElement extends HTMLFormElement {
-  readonly elements: FormElements;
+    readonly elements: FormElements;
 }
 
 function ColorSchemeToggle(props: IconButtonProps) {
-  const { onClick, ...other } = props;
-  const { mode, setMode } = useColorScheme();
-  const [mounted, setMounted] = React.useState(false);
+    const { onClick, ...other } = props;
+    const { mode, setMode } = useColorScheme();
+    const [mounted, setMounted] = React.useState(false);
 
-  React.useEffect(() => setMounted(true), []);
+    React.useEffect(() => setMounted(true), []);
 
-  return (
-    <IconButton
-      aria-label="toggle light/dark mode"
-      size="sm"
-      variant="outlined"
-      disabled={!mounted}
-      onClick={(event) => {
-        setMode(mode === 'light' ? 'dark' : 'light');
-        onClick?.(event);
-      }}
-      {...other}
-    >
-      {mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
-    </IconButton>
-  );
+    return (
+        <IconButton
+            aria-label="toggle light/dark mode"
+            size="sm"
+            variant="outlined"
+            disabled={!mounted}
+            onClick={(event) => {
+                setMode(mode === 'light' ? 'dark' : 'light');
+                onClick?.(event);
+            }}
+            {...other}
+        >
+            {mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
+        </IconButton>
+    );
 }
 
 export default function Login() {
-  const [errorMessage, setErrorMessage] = React.useState('');
+    const [errorMessage, setErrorMessage] = React.useState('');
 
-  const handleLogin = async (event: React.FormEvent<SignInFormElement>) => {
-    event.preventDefault();
-    const formElements = event.currentTarget.elements;
-    const data = {
-      username: formElements.username.value,
-      password: formElements.password.value,
+    const handleLogin = async (event: React.FormEvent<SignInFormElement>) => {
+        event.preventDefault();
+        const formElements = event.currentTarget.elements;
+        const data = {
+            username: formElements.username.value,
+            password: formElements.password.value,
+        };
+
+        try {
+            const response = await (window as any).electronAPI.loginUser(data);
+            if (response.success) {
+                setErrorMessage('');
+                window.location.href = '/profile-selector';
+            } else {
+                setErrorMessage(response.message || 'Login failed');
+            }
+        } catch (error) {
+            setErrorMessage('Login failed');
+            console.error('Login error:', error);
+        }
     };
 
-    try {
-      const response = await axios.post('http://localhost:3000/api/auth/login', data);
-      if (response.data.success) {
-        setErrorMessage('');
-        window.location.href = '/dashboard';
-      } else {
-        setErrorMessage(response.data.message || 'Login failed');
-      }
-    } catch (error) {
-      setErrorMessage('Login failed');
-      console.error('Login error:', error);
-    }
-  };
-
-  return (
-    <CSSTransition in={true} appear={true} timeout={300} classNames="fade">
-      <CssVarsProvider defaultMode="dark" disableTransitionOnChange>
-        <CssBaseline />
-        <GlobalStyles
-          styles={{
-            ':root': {
-              '--Form-maxWidth': '800px',
-              '--Transition-duration': '0.4s',
-            },
-          }}
-        />
-        <Box
-          sx={(theme) => ({
-            width: { xs: '100%', md: '50vw' },
-            transition: 'width var(--Transition-duration)',
-            transitionDelay: 'calc(var(--Transition-duration) + 0.1s)',
-            position: 'relative',
-            zIndex: 1,
-            display: 'flex',
-            justifyContent: 'flex-end',
-            backdropFilter: 'blur(12px)',
-            backgroundColor: 'rgba(255 255 255 / 0.2)',
-            [theme.getColorSchemeSelector('dark')]: {
-              backgroundColor: 'rgba(19 19 24 / 0.4)',
-            },
-          })}
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              minHeight: '100dvh',
-              width: '100%',
-              px: 2,
-            }}
-          >
-            <Box
-              component="header"
-              sx={{
-                py: 3,
-                display: 'flex',
-                justifyContent: 'space-between',
-              }}
-            >
-              <Box sx={{ gap: 2, display: 'flex', alignItems: 'center' }}>
-                <IconButton variant="soft" color="primary" size="sm">
-                  <BadgeIcon />
-                </IconButton>
-                <Typography level="title-lg">TeamLeak</Typography>
-              </Box>
-              <ColorSchemeToggle />
-            </Box>
-            <Box
-              component="main"
-              sx={{
-                my: 'auto',
-                py: 2,
-                pb: 5,
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 2,
-                width: 400,
-                maxWidth: '100%',
-                mx: 'auto',
-                borderRadius: 'sm',
-                '& form': {
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 2,
-                },
-                [`& .MuiFormLabel-asterisk`]: {
-                  visibility: 'hidden',
-                },
-              }}
-            >
-              <Stack gap={4} sx={{ mb: 2 }}>
-                <Stack gap={1}>
-                  <Typography component="h1" level="h3">
-                    Sign in
-                  </Typography>
-                  <Typography level="body-sm">
-                    Don't have account?{' '}
-                    <Link href="/register" level="title-sm">
-                      Sign up!
-                    </Link>
-                  </Typography>
-                </Stack>
-              </Stack>
-              <Divider
-                sx={(theme) => ({
-                  [theme.getColorSchemeSelector('light')]: {
-                    color: { xs: '#FFF', md: 'text.tertiary' },
-                  },
-                })}
-              />
-              {errorMessage && (
-                <Typography level="body-sm" color="danger">
-                  {errorMessage}
-                </Typography>
-              )}
-              <Stack gap={4} sx={{ mt: 2 }}>
-                <form onSubmit={handleLogin}>
-                  <FormControl required>
-                    <FormLabel>Username</FormLabel>
-                    <Input type="username" name="username" />
-                  </FormControl>
-                  <FormControl required>
-                    <FormLabel>Password</FormLabel>
-                    <Input type="password" name="password" />
-                  </FormControl>
-                  <Stack gap={4} sx={{ mt: 2 }}>
-                    <Box
-                      sx={{
+    return (
+        <CSSTransition in={true} appear={true} timeout={300} classNames="fade">
+            <CssVarsProvider defaultMode="dark" disableTransitionOnChange>
+                <CssBaseline />
+                <GlobalStyles
+                    styles={{
+                        ':root': {
+                            '--Form-maxWidth': '800px',
+                            '--Transition-duration': '0.4s',
+                        },
+                    }}
+                />
+                <Box
+                    sx={(theme) => ({
+                        width: { xs: '100%', md: '50vw' },
+                        transition: 'width var(--Transition-duration)',
+                        transitionDelay: 'calc(var(--Transition-duration) + 0.1s)',
+                        position: 'relative',
+                        zIndex: 1,
                         display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                      }}
+                        justifyContent: 'flex-end',
+                        backdropFilter: 'blur(12px)',
+                        backgroundColor: 'rgba(255 255 255 / 0.2)',
+                        [theme.getColorSchemeSelector('dark')]: {
+                            backgroundColor: 'rgba(19 19 24 / 0.4)',
+                        },
+                    })}
+                >
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            minHeight: '100dvh',
+                            width: '100%',
+                            px: 2,
+                        }}
                     >
-                      <Checkbox size="sm" label="Remember me" name="persistent" />
-                      <Link level="title-sm" href="/forgot-password">
-                        Forgot your password?
-                      </Link>
+                        <Box
+                            component="header"
+                            sx={{
+                                py: 3,
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                            }}
+                        >
+                            <Box sx={{ gap: 2, display: 'flex', alignItems: 'center' }}>
+                                <IconButton variant="soft" color="primary" size="sm">
+                                    <BadgeIcon />
+                                </IconButton>
+                                <Typography level="title-lg">TeamLeak</Typography>
+                            </Box>
+                            <ColorSchemeToggle />
+                        </Box>
+                        <Box
+                            component="main"
+                            sx={{
+                                my: 'auto',
+                                py: 2,
+                                pb: 5,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: 2,
+                                width: 400,
+                                maxWidth: '100%',
+                                mx: 'auto',
+                                borderRadius: 'sm',
+                                '& form': {
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: 2,
+                                },
+                                [`& .MuiFormLabel-asterisk`]: {
+                                    visibility: 'hidden',
+                                },
+                            }}
+                        >
+                            <Stack gap={4} sx={{ mb: 2 }}>
+                                <Stack gap={1}>
+                                    <Typography component="h1" level="h3">
+                                        Sign in
+                                    </Typography>
+                                    <Typography level="body-sm">
+                                        Don't have an account?{' '}
+                                        <Link href="/register" level="title-sm">
+                                            Sign up!
+                                        </Link>
+                                    </Typography>
+                                </Stack>
+                            </Stack>
+                            <Divider
+                                sx={(theme) => ({
+                                    [theme.getColorSchemeSelector('light')]: {
+                                        color: { xs: '#FFF', md: 'text.tertiary' },
+                                    },
+                                })}
+                            />
+                            {errorMessage && (
+                                <Typography level="body-sm" color="danger">
+                                    {errorMessage}
+                                </Typography>
+                            )}
+                            <Stack gap={4} sx={{ mt: 2 }}>
+                                <form onSubmit={handleLogin}>
+                                    <FormControl required>
+                                        <FormLabel>Username</FormLabel>
+                                        <Input type="text" name="username" />
+                                    </FormControl>
+                                    <FormControl required>
+                                        <FormLabel>Password</FormLabel>
+                                        <Input type="password" name="password" />
+                                    </FormControl>
+                                    <Stack gap={4} sx={{ mt: 2 }}>
+                                        <Box
+                                            sx={{
+                                                display: 'flex',
+                                                justifyContent: 'space-between',
+                                                alignItems: 'center',
+                                            }}
+                                        >
+                                            <Checkbox size="sm" label="Remember me" name="persistent" />
+                                            <Link level="title-sm" href="/forgot-password">
+                                                Forgot your password?
+                                            </Link>
+                                        </Box>
+                                        <Button type="submit" fullWidth>
+                                            Sign in
+                                        </Button>
+                                    </Stack>
+                                </form>
+                            </Stack>
+                        </Box>
+                        <Box component="footer" sx={{ py: 3 }}>
+                            <Typography level="body-xs" textAlign="center">
+                                © TeamLeak {new Date().getFullYear()}
+                            </Typography>
+                        </Box>
                     </Box>
-                    <Button type="submit" fullWidth>
-                      Sign in
-                    </Button>
-                  </Stack>
-                </form>
-              </Stack>
-            </Box>
-            <Box component="footer" sx={{ py: 3 }}>
-              <Typography level="body-xs" textAlign="center">
-                © TeamLeak {new Date().getFullYear()}
-              </Typography>
-            </Box>
-          </Box>
-        </Box>
-        <Box
-          sx={(theme) => ({
-            height: '100%',
-            position: 'fixed',
-            right: 0,
-            top: 0,
-            bottom: 0,
-            left: { xs: 0, md: '50vw' },
-            transition:
-              'background-image var(--Transition-duration), left var(--Transition-duration) !important',
-            transitionDelay: 'calc(var(--Transition-duration) + 0.1s)',
-            backgroundColor: 'background.level1',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            backgroundImage:
-              'url(https://images.unsplash.com/photo-1527181152855-fc03fc7949c8?auto=format&w=1000&dpr=2)',
-            [theme.getColorSchemeSelector('dark')]: {
-              backgroundImage:
-                'url(https://images.unsplash.com/photo-1572072393749-3ca9c8ea0831?auto=format&w=1000&dpr=2)',
-            },
-          })}
-        />
-      </CssVarsProvider>
-    </CSSTransition>
-  );
+                </Box>
+                <Box
+                    sx={(theme) => ({
+                        height: '100%',
+                        position: 'fixed',
+                        right: 0,
+                        top: 0,
+                        bottom: 0,
+                        left: { xs: 0, md: '50vw' },
+                        transition:
+                            'background-image var(--Transition-duration), left var (--Transition-duration) !important',
+                        transitionDelay: 'calc(var(--Transition-duration) + 0.1s)',
+                        backgroundColor: 'background.level1',
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundImage:
+                            'url(https://images.unsplash.com/photo-1527181152855-fc03fc7949c8?auto=format&w=1000&dpr=2)',
+                        [theme.getColorSchemeSelector('dark')]: {
+                            backgroundImage:
+                                'url(https://images.unsplash.com/photo-1572072393749-3ca9c8ea0831?auto=format&w=1000&dpr=2)',
+                        },
+                    })}
+                />
+            </CssVarsProvider>
+        </CSSTransition>
+    );
 }

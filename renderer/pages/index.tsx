@@ -28,30 +28,11 @@ const HomePage: React.FC = () => {
   };
 
   const handleAccountClick = () => {
-    window.location.href = '/account';
+    window.location.href = '/profile';
   };
 
   const handleLoginClick = () => {
     window.location.href = '/login';
-  };
-
-  const saveUsername = async () => {
-    const username = (document.getElementById('username') as HTMLInputElement).value;
-    if (window.electron && window.electron.setStoreValue) {
-      await window.electron.setStoreValue('username', username);
-      alert('Username saved!');
-    } else {
-      console.error('electronAPI is not available');
-    }
-  };
-
-  const loadUsername = async () => {
-    if (window.electron && window.electron.getStoreValue) {
-      const username = await window.electron.getStoreValue('username');
-      alert(`Loaded Username: ${username}`);
-    } else {
-      console.error('electronAPI is not available');
-    }
   };
 
   return (
@@ -166,11 +147,6 @@ const HomePage: React.FC = () => {
             <Typography level="body-md" mt={2}>
               Players: 0/100 | Mojang Status: <span style={{ color: 'red' }}>Offline</span>
             </Typography>
-            <Box sx={{ mt: 4 }}>
-              <input id="username" type="text" placeholder="Username" style={{ padding: '10px', fontSize: '1rem' }} />
-              <Button onClick={saveUsername} sx={{ ml: 2 }}>Save Username</Button>
-              <Button onClick={loadUsername} sx={{ ml: 2 }}>Load Username</Button>
-            </Box>
           </Box>
         </Box>
       </Box>

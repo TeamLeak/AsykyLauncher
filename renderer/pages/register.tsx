@@ -17,7 +17,6 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import BadgeIcon from '@mui/icons-material/Badge';
 import { CSSTransition } from 'react-transition-group';
-import axios from 'axios';
 
 interface FormElements extends HTMLFormControlsCollection {
   email: HTMLInputElement;
@@ -60,19 +59,19 @@ export default function Register() {
   const handleRegister = async (event: React.FormEvent<SignInFormElement>) => {
     event.preventDefault();
     const formElements = event.currentTarget.elements;
-    const data = {
+    const profile = {
       email: formElements.email.value,
       username: formElements.username.value,
       password: formElements.password.value,
     };
 
     try {
-      const response = await axios.post('http://localhost:3000/api/auth/register', data);
-      if (response.data.success) {
+      const response = await (window as any).electronAPI.registerUser(profile);
+      if (response.success) {
         setErrorMessage('');
         window.location.href = '/login';
       } else {
-        setErrorMessage(response.data.message || 'Registration failed');
+        setErrorMessage(response.message || 'Registration failed');
       }
     } catch (error) {
       setErrorMessage('Registration failed');
