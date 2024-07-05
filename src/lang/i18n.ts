@@ -15,6 +15,11 @@ i18n.use(initReactI18next).init({
                 "loginSuccessMessage": "You have been successfully logged in.",
                 "loginFailureMessage": "Invalid username or password.",
                 "progress": "Progress",
+                "loginWithSite": "Login with site",
+                "usernameOrEmail": "Username or Email",
+                "noAccount": "Don't have an account?",
+                "createAccount": "Create one",
+                "or": "OR"
             }
         },
         ru: {
@@ -29,6 +34,11 @@ i18n.use(initReactI18next).init({
                 "loginSuccessMessage": "Вы успешно вошли в систему.",
                 "loginFailureMessage": "Неправильное имя пользователя или пароль.",
                 "progress": "Прогресс",
+                "loginWithSite": "Войти через сайт",
+                "usernameOrEmail": "Имя пользователя или почта",
+                "noAccount": "Нет аккаунта?",
+                "createAccount": "Создать",
+                "or": "ИЛИ"
             }
         }
     },
