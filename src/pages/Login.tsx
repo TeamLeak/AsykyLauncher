@@ -5,6 +5,7 @@ import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { InputGroup, InputLeftElement } from '@chakra-ui/react';
 import { ArrowForwardIcon, EmailIcon, LockIcon } from "@chakra-ui/icons";
+import { open } from '@tauri-apps/api/shell';
 
 const Login = () => {
     const { t } = useTranslation();
@@ -34,6 +35,10 @@ const Login = () => {
                 isClosable: true,
             });
         }
+    };
+
+    const handleLoginWithSite = async () => {
+        await open('http://localhost:1420/login');
     };
 
     return (
@@ -81,7 +86,7 @@ const Login = () => {
                 </AbsoluteCenter>
             </Box>
 
-            <Button rightIcon={<ArrowForwardIcon />} colorScheme="teal" width="full" mb={4}>
+            <Button rightIcon={<ArrowForwardIcon />} colorScheme="teal" width="full" mb={4} onClick={handleLoginWithSite}>
                 {t('loginWithSite')}
             </Button>
             <Text mt={4} textAlign="center">

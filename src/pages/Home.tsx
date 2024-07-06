@@ -18,9 +18,6 @@ const Home = () => {
                 <Button as={Link} to="/progress" colorScheme="blue" size="lg" rightIcon={<ArrowRight/>}>
                     {t('progress')}
                 </Button>
-                <Button as={Link} to="/selectplayer" colorScheme="blue" size="lg" rightIcon={<ArrowRight/>}>
-                    {t('progress')}
-                </Button>
             </VStack>
         </Box>
     );
