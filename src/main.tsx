@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import { I18nextProvider } from 'react-i18next';
-import i18n from './lang/i18n.ts';
+import i18n from './lang/i18n';
 import { BrowserRouter } from 'react-router-dom';
 import theme from './utils/theme';
 
