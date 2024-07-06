@@ -1,14 +1,22 @@
-import React, { useState } from 'react';
-import { Box, Button, Input, FormControl, FormLabel, useToast, Divider, Text, AbsoluteCenter, Link as ChakraLink } from '@chakra-ui/react';
-import { invoke } from '@tauri-apps/api/tauri';
-import { useNavigate, Link as RouterLink } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { InputGroup, InputLeftElement } from '@chakra-ui/react';
-import { ArrowForwardIcon, EmailIcon, LockIcon, AtSignIcon } from '@chakra-ui/icons';
-import { open } from '@tauri-apps/api/shell';
+import React, {useState} from 'react';
+import {
+    Box,
+    Button,
+    Input,
+    FormControl,
+    FormLabel,
+    useToast,
+    Text,
+    Link as ChakraLink
+} from '@chakra-ui/react';
+import {invoke} from '@tauri-apps/api/tauri';
+import {useNavigate, Link as RouterLink} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
+import {InputGroup, InputLeftElement} from '@chakra-ui/react';
+import { EmailIcon, LockIcon, AtSignIcon} from '@chakra-ui/icons';
 
 const Register = () => {
-    const { t } = useTranslation();
+    const {t} = useTranslation();
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -29,7 +37,7 @@ const Register = () => {
             return;
         }
 
-        const response = await invoke('register', { username, email, password });
+        const response = await invoke('register', {username, email, password});
         if (response === "Register successful") {
             toast({
                 title: t('registrationSuccessful'),
@@ -50,18 +58,16 @@ const Register = () => {
         }
     };
 
-    const handleLoginWithSite = async () => {
-        await open('http://localhost:1420/register');
-    };
-
     return (
         <Box p={5} maxW="md" mx="auto">
+            <Text fontSize="2xl" mb={4} textAlign="center">{t('welcome')}</Text>
+            <Text fontSize="sm" mb={8} textAlign="center">{t('pleaseRegisterToContinue')}</Text>
             <form onSubmit={handleSubmit}>
                 <FormControl>
                     <FormLabel>{t('username')}</FormLabel>
                     <InputGroup>
                         <InputLeftElement pointerEvents="none">
-                            <AtSignIcon />
+                            <AtSignIcon/>
                         </InputLeftElement>
                         <Input
                             type="text"
@@ -75,7 +81,7 @@ const Register = () => {
                     <FormLabel>{t('email')}</FormLabel>
                     <InputGroup>
                         <InputLeftElement pointerEvents="none">
-                            <EmailIcon />
+                            <EmailIcon/>
                         </InputLeftElement>
                         <Input
                             type="email"
@@ -89,7 +95,7 @@ const Register = () => {
                     <FormLabel>{t('password')}</FormLabel>
                     <InputGroup>
                         <InputLeftElement pointerEvents="none">
-                            <LockIcon />
+                            <LockIcon/>
                         </InputLeftElement>
                         <Input
                             type="password"
@@ -103,7 +109,7 @@ const Register = () => {
                     <FormLabel>{t('confirmPassword')}</FormLabel>
                     <InputGroup>
                         <InputLeftElement pointerEvents="none">
-                            <LockIcon />
+                            <LockIcon/>
                         </InputLeftElement>
                         <Input
                             type="password"
@@ -118,16 +124,6 @@ const Register = () => {
                 </Button>
             </form>
 
-            <Box position='relative' padding='10'>
-                <Divider />
-                <AbsoluteCenter px='4'>
-                    {t('or')}
-                </AbsoluteCenter>
-            </Box>
-
-            <Button rightIcon={<ArrowForwardIcon />} colorScheme="teal" width="full" mb={4} onClick={handleLoginWithSite}>
-                {t('registerWithSite')}
-            </Button>
             <Text mt={4} textAlign="center">
                 {t('alreadyHaveAccount')}{' '}
                 <ChakraLink as={RouterLink} to="/login" color="teal.500">

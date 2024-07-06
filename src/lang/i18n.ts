@@ -6,6 +6,7 @@ i18n.use(initReactI18next).init({
     en: {
       translation: {
         "welcome": "Welcome to Tauri with Chakra UI!",
+        "pleaseRegisterToContinue": "Please register to continue",
         "clickMe": "Click Me",
         "login": "Login",
         "register": "Register",
@@ -41,6 +42,7 @@ i18n.use(initReactI18next).init({
     ru: {
       translation: {
         "welcome": "Добро пожаловать в Tauri с Chakra UI!",
+        "pleaseRegisterToContinue": "Пожалуйста, зарегистрируйте аккаунт, чтобы продолжить.",
         "clickMe": "Нажми меня",
         "login": "Вход",
         "register": "Регистрация",

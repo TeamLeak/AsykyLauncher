@@ -5,6 +5,17 @@ const config: ThemeConfig = {
     useSystemColorMode: false,
 };
 
-const theme = extendTheme({ config });
+const styles = {
+    global: (props: any) => ({
+        body: {
+            transitionProperty: 'background-color, color',
+            transitionDuration: '0.2s',
+            bg: props.colorMode === 'light' ? 'white' : 'gray.800',
+            color: props.colorMode === 'light' ? 'black' : 'white',
+        },
+    }),
+};
+
+const theme = extendTheme({ config, styles });
 
 export default theme;
