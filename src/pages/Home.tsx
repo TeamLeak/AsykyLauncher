@@ -18,6 +18,9 @@ const Home = () => {
                 <Button as={Link} to="/progress" colorScheme="blue" size="lg" rightIcon={<ArrowRight/>}>
                     {t('progress')}
                 </Button>
+                <Button as={Link} to="/settings" colorScheme="blue" size="lg" rightIcon={<ArrowRight/>}>
+                    {t('Settings')}
+                </Button>
             </VStack>
         </Box>
     );
