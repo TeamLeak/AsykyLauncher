@@ -7,12 +7,12 @@ use std::fs;
 use std::path::PathBuf;
 use std::sync::{Arc, Mutex};
 use tauri::State;
-use crate::storage::ensure_app_dirs;
-use crate::storage::get_app_dir;
+use log::info;
+use crate::storage::{ensure_app_dirs, get_app_dir};
 
 const KEY: &[u8; 32] = b"an example very very secret key.";
 
-#[derive(Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub(crate) struct Session {
     id: String,
     created_at: String,
@@ -23,12 +23,12 @@ pub(crate) struct Session {
     jwt_token: String,
 }
 
-#[derive(Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub(crate) struct User {
     name: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub(crate) struct Claims {
     username: String,
     exp: i64,
@@ -61,28 +61,44 @@ fn decrypt(data: &[u8], key: &[u8]) -> Vec<u8> {
 }
 
 #[tauri::command]
-pub async fn authenticate_user(username: String, password: String, state: State<'_, SessionState>) -> Result<(), String> {
+pub async fn authenticate_user(username: String, password: String, state: State<'_, SessionState>) -> Result<String, String> {
+    info!("Received login request for username: {}", username);
+
     let client = Client::new();
     let response = client.post("http://localhost:8080/api/auth")
         .json(&serde_json::json!({ "username": username, "password": password }))
         .send()
         .await
-        .map_err(|e| e.to_string())?;
+        .map_err(|e| {
+            info!("Error sending request: {}", e);
+            e.to_string()
+        })?;
+
+    info!("Response status: {}", response.status());
 
     if response.status().is_success() {
-        let session: Session = response.json().await.map_err(|e| e.to_string())?;
+        let session: Session = response.json().await.map_err(|e| {
+            info!("Error parsing response: {}", e);
+            e.to_string()
+        })?;
+        info!("Session created: {:?}", session);
         let encrypted_session = encrypt(&serde_json::to_vec(&session).unwrap(), KEY);
 
         ensure_app_dirs();
         let path = get_session_path();
-        fs::write(path, encrypted_session).map_err(|e| e.to_string())?;
+        fs::write(path, encrypted_session).map_err(|e| {
+            info!("Error writing session to file: {}", e);
+            e.to_string()
+        })?;
 
         let mut session_guard = state.session.lock().unwrap();
         *session_guard = Some(session);
 
-        Ok(())
+        Ok("Login successful".to_string())
     } else {
-        Err("Failed to authenticate user".to_string())
+        let error_message = format!("Failed to authenticate user: {}", response.status());
+        info!("{}", error_message);
+        Err(error_message)
     }
 }
 

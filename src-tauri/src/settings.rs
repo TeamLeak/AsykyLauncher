@@ -1,8 +1,6 @@
 use std::collections::HashMap;
 use std::fs;
-
 use serde::{Deserialize, Serialize};
-
 use crate::storage::{ensure_app_dirs, get_settings_path};
 
 const DEFAULT_SETTINGS: &str = r#"{
@@ -11,7 +9,7 @@ const DEFAULT_SETTINGS: &str = r#"{
   "volume": 75
 }"#;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 struct Settings {
     theme: String,
     notifications: bool,

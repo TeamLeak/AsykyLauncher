@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1,
+    "title": "Minecraft Diamond Sword",
+    "description": "A powerful diamond sword with enchantments.",
+    "rating": 4,
+    "price": "$10",
+    "image": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/e/ef/Diamond_Sword_JE3_BE2.png",
+    "discount": true,
+    "category": "popular"
+  },
+  {
+    "id": 2,
+    "title": "Minecraft Iron Armor Set",
+    "description": "Full set of iron armor to protect you in battles.",
+    "rating": 5,
+    "price": "$25",
+    "image": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/8/89/Iron_Armor.png",
+    "discount": false,
+    "category": "regular"
+  },
+  {
+    "id": 3,
+    "title": "Minecraft Enchanted Book",
+    "description": "A book with powerful enchantments.",
+    "rating": 4,
+    "price": "$15",
+    "image": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/a/a5/Enchanted_Book_JE2_BE2.png",
+    "discount": true,
+    "category": "discount"
+  },
+  {
+    "id": 4,
+    "title": "Minecraft Golden Apple",
+    "description": "A rare golden apple to boost your health.",
+    "rating": 5,
+    "price": "$5",
+    "image": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/e/e0/Enchanted_Golden_Apple_JE2_BE2.png",
+    "discount": false,
+    "category": "popular"
+  },
+  {
+    "id": 5,
+    "title": "Minecraft Ender Pearl",
+    "description": "An ender pearl for quick teleportation.",
+    "rating": 3,
+    "price": "$3",
+    "image": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/c/ca/Ender_Pearl_JE2_BE2.png",
+    "discount": true,
+    "category": "regular"
+  },
+  {
+    "id": 6,
+    "title": "Minecraft Redstone",
+    "description": "A pack of redstone for your contraptions.",
+    "rating": 4,
+    "price": "$2",
+    "image": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/6/64/Redstone_Dust_JE2_BE2.png",
+    "discount": true,
+    "category": "discount"
+  },
+  {
+    "id": 7,
+    "title": "Minecraft Potion",
+    "description": "A potion to quickly heal your wounds.",
+    "rating": 5,
+    "price": "$8",
+    "image": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/7/78/Splash_Potion_of_Healing_JE2_BE2.png",
+    "discount": false,
+    "category": "popular"
+  },
+  {
+    "id": 8,
+    "title": "Minecraft Elytra",
+    "description": "A pair of elytra for gliding through the skies.",
+    "rating": 5,
+    "price": "$30",
+    "image": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/4/49/Elytra_JE2_BE2.png",
+    "discount": true,
+    "category": "regular"
+  },
+  {
+    "id": 9,
+    "title": "Minecraft Netherite Ingot",
+    "description": "A rare netherite ingot for crafting the best gear.",
+    "rating": 5,
+    "price": "$20",
+    "image": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/b/b9/Netherite_Ingot_JE2_BE2.png",
+    "discount": true,
+    "category": "discount"
+  }
+]

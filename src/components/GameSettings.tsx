@@ -2,15 +2,16 @@ import React, { useState } from 'react';
 import {
     Box, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, Flex, Text, Slider, SliderTrack, SliderFilledTrack, SliderThumb, Input, Select, Table, Thead, Tbody, Tr, Th, Td, Switch, useColorModeValue, Tooltip
 } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 const GameSettings: React.FC<{ tempSettings: any; handleInputChange: (key: string, value: any) => void; }> = ({ tempSettings, handleInputChange }) => {
+    const { t } = useTranslation();
     const [ramUnit, setRamUnit] = useState('GB');
     const [cacheUnit, setCacheUnit] = useState('GB');
 
     const mods = [
         { id: 1, name: 'Mod 1', version: '1.0.0', dateAdded: '2022-01-01', enabled: true },
         { id: 2, name: 'Mod 2', version: '1.2.0', dateAdded: '2022-02-15', enabled: false },
-        // Add more mods here...
     ];
 
     return (
@@ -18,13 +19,13 @@ const GameSettings: React.FC<{ tempSettings: any; handleInputChange: (key: strin
             <AccordionItem border="1px solid" borderColor={useColorModeValue('gray.200', 'gray.600')} borderRadius="md" mb={4}>
                 <AccordionButton _expanded={{ bg: useColorModeValue('gray.100', 'gray.700') }} px={4} py={2}>
                     <Box flex="1" textAlign="left" fontSize="xl" fontWeight="bold">
-                        RAM Allocation ({ramUnit})
+                        {t('gameSettings.ramAllocation')} ({ramUnit})
                     </Box>
                     <AccordionIcon />
                 </AccordionButton>
                 <AccordionPanel pb={4} px={4}>
-                    <Flex justifyContent="flex-end">
-                        <Text fontSize="sm" mb={2}>Set the amount of RAM allocated to the game.</Text>
+                    <Flex justifyContent="flex-start">
+                        <Text fontSize="sm" mb={2}>{t('gameSettings.setRam')}</Text>
                     </Flex>
                     <Flex align="center" gap="4">
                         <Slider value={tempSettings.ram} onChange={(val) => handleInputChange('ram', val)} max={ramUnit === 'GB' ? 64 : 64000} min={1}>
@@ -53,13 +54,13 @@ const GameSettings: React.FC<{ tempSettings: any; handleInputChange: (key: strin
             <AccordionItem border="1px solid" borderColor={useColorModeValue('gray.200', 'gray.600')} borderRadius="md" mb={4}>
                 <AccordionButton _expanded={{ bg: useColorModeValue('gray.100', 'gray.700') }} px={4} py={2}>
                     <Box flex="1" textAlign="left" fontSize="xl" fontWeight="bold">
-                        Cache Size ({cacheUnit})
+                        {t('gameSettings.cacheSize')} ({cacheUnit})
                     </Box>
                     <AccordionIcon />
                 </AccordionButton>
                 <AccordionPanel pb={4} px={4}>
-                    <Flex justifyContent="flex-end">
-                        <Text fontSize="sm" mb={2}>Set the amount of cache size allocated to the game.</Text>
+                    <Flex justifyContent="flex-start">
+                        <Text fontSize="sm" mb={2}>{t('gameSettings.setCache')}</Text>
                     </Flex>
                     <Flex align="center" gap="4">
                         <Slider value={tempSettings.cache} onChange={(val) => handleInputChange('cache', val)} max={cacheUnit === 'GB' ? 1024 : 1048576} min={0}>
@@ -74,13 +75,13 @@ const GameSettings: React.FC<{ tempSettings: any; handleInputChange: (key: strin
                             type="number"
                             max={cacheUnit === 'GB' ? 1024 : 1048576}
                             min={0}
-                            width="100px"
+                            width="150px"
                             defaultValue={tempSettings.cache}
                         />
                         <Select value={cacheUnit} onChange={(e) => setCacheUnit(e.target.value)} width="150px">
                             <option value="GB">GB</option>
                             <option value="MB">MB</option>
-                            </Select>
+                        </Select>
                     </Flex>
                 </AccordionPanel>
             </AccordionItem>
@@ -88,13 +89,13 @@ const GameSettings: React.FC<{ tempSettings: any; handleInputChange: (key: strin
             <AccordionItem border="1px solid" borderColor={useColorModeValue('gray.200', 'gray.600')} borderRadius="md" mb={4}>
                 <AccordionButton _expanded={{ bg: useColorModeValue('gray.100', 'gray.700') }} px={4} py={2}>
                     <Box flex="1" textAlign="left" fontSize="xl" fontWeight="bold">
-                        JVM Arguments
+                        {t('gameSettings.jvmArguments')}
                     </Box>
                     <AccordionIcon />
                 </AccordionButton>
                 <AccordionPanel pb={4} px={4}>
-                    <Flex justifyContent="flex-end">
-                        <Text fontSize="sm" mb={2}>Set the JVM arguments for the game.</Text>
+                    <Flex justifyContent="flex-start">
+                        <Text fontSize="sm" mb={2}>{t('gameSettings.setJvmArgs')}</Text>
                     </Flex>
                     <Input
                         value={tempSettings.jvmArgs}
@@ -102,7 +103,7 @@ const GameSettings: React.FC<{ tempSettings: any; handleInputChange: (key: strin
                         defaultValue={tempSettings.jvmArgs}
                     />
                     <Tooltip label="For example: -Xmx1024m -Xms512m">
-                        <Text fontSize="sm" mt="2">Common JVM Arguments: -Xmx&lt;size&gt;m -Xms&lt;size&gt;m</Text>
+                        <Text fontSize="sm" mt="2">{t('gameSettings.jvmExample')}</Text>
                     </Tooltip>
                 </AccordionPanel>
             </AccordionItem>
@@ -110,21 +111,21 @@ const GameSettings: React.FC<{ tempSettings: any; handleInputChange: (key: strin
             <AccordionItem border="1px solid" borderColor={useColorModeValue('gray.200', 'gray.600')} borderRadius="md">
                 <AccordionButton _expanded={{ bg: useColorModeValue('gray.100', 'gray.700') }} px={4} py={2}>
                     <Box flex="1" textAlign="left" fontSize="xl" fontWeight="bold">
-                        Modifications
+                        {t('gameSettings.modifications')}
                     </Box>
                     <AccordionIcon />
                 </AccordionButton>
                 <AccordionPanel pb={4} px={4}>
-                    <Flex justifyContent="flex-end">
-                        <Text fontSize="sm" mb={2}>Enable or disable game modifications.</Text>
+                    <Flex justifyContent="flex-start">
+                        <Text fontSize="sm" mb={2}>{t('gameSettings.enableDisableMods')}</Text>
                     </Flex>
                     <Table variant="simple">
                         <Thead>
                             <Tr>
-                                <Th>Enable</Th>
-                                <Th>Name</Th>
-                                <Th>Version</Th>
-                                <Th>Date Added</Th>
+                                <Th>{t('gameSettings.enable')}</Th>
+                                <Th>{t('gameSettings.name')}</Th>
+                                <Th>{t('gameSettings.version')}</Th>
+                                <Th>{t('gameSettings.dateAdded')}</Th>
                             </Tr>
                         </Thead>
                         <Tbody>

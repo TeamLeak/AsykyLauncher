@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Box, Button, Input, FormControl, FormLabel, useToast, Divider, Text, AbsoluteCenter, Link as ChakraLink } from '@chakra-ui/react';
 import { invoke } from '@tauri-apps/api/tauri';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
@@ -14,19 +14,27 @@ const Login = () => {
     const navigate = useNavigate();
     const toast = useToast();
 
-    const handleSubmit = async (event: React.FormEvent) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const response = await invoke('login', { username, password });
-        if (response === "Login successful") {
-            toast({
-                title: t('loginSuccessful'),
-                description: t('loginSuccessMessage'),
-                status: "success",
-                duration: 3000,
-                isClosable: true,
-            });
-            navigate('/');
-        } else {
+        try {
+            console.log("Sending login request", { username, password });
+            const response = await invoke('authenticate_user', { username, password });
+            console.log("Response from authenticate_user:", response);
+
+            if (response === "Login successful") {
+                toast({
+                    title: t('loginSuccessful'),
+                    description: t('loginSuccessMessage'),
+                    status: "success",
+                    duration: 3000,
+                    isClosable: true,
+                });
+                navigate('/');
+            } else {
+                throw new Error("Failed to login");
+            }
+        } catch (error) {
+            console.error("Login error:", error);
             toast({
                 title: t('loginFailed'),
                 description: t('loginFailureMessage'),

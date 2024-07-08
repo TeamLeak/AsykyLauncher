@@ -1,5 +1,5 @@
 use tauri::{CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem, AppHandle, Manager};
-use crate::sessions::{kill_session, SessionState};
+use crate::{SessionState, kill_session};
 
 pub fn create_tray() -> SystemTray {
     let open = CustomMenuItem::new("open".to_string(), "Open");
@@ -13,7 +13,8 @@ pub fn create_tray() -> SystemTray {
         .add_native_item(SystemTrayMenuItem::Separator)
         .add_item(quit);
 
-    SystemTray::new().with_menu(tray_menu)
+    SystemTray::new()
+        .with_menu(tray_menu)
 }
 
 pub fn handle_tray_event(app: &AppHandle, event: SystemTrayEvent) {
