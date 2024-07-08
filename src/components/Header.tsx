@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Flex, Heading, HStack, Button, Avatar, Menu, MenuButton, MenuList, MenuItem, MenuDivider, Spacer, Text, Icon, useColorModeValue
 } from '@chakra-ui/react';
@@ -8,6 +8,7 @@ import { useLocation, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 const Header: React.FC = () => {
+  const [user] = useState({ name: 'Guest', avatar: 'default-avatar.jpg' });
   const location = useLocation();
   const { t } = useTranslation();
 
@@ -65,8 +66,8 @@ const Header: React.FC = () => {
       <Menu>
         <MenuButton as={Button} rightIcon={<ChevronDownIcon />} bg={hoverBg} _hover={{ bg: hoverBg }} _active={{ bg: activeBg }}>
           <HStack spacing="3">
-            <Avatar size="sm" name="Asyky" src="path-to-avatar-image.jpg" />
-            <Text>Asyky</Text>
+            <Avatar size="sm" name={user.name} src={user.avatar} />
+            <Text>{user.name}</Text>
           </HStack>
         </MenuButton>
         <MenuList bg={menuBg} borderColor={menuBorderColor}>

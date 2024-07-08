@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Image, Text, Badge, Flex, VStack, HStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Image, Text, Badge, Flex, VStack, HStack, Button, useColorModeValue } from '@chakra-ui/react';
 import { StarIcon } from '@chakra-ui/icons';
 import { useTranslation } from 'react-i18next';
 
@@ -12,21 +12,40 @@ interface ProductCardProps {
   discount?: boolean;
 }
 
+const getRandomColor = () => {
+  const colors = ['red.100', 'blue.100', 'green.100', 'yellow.100', 'purple.100', 'orange.100'];
+  return colors[Math.floor(Math.random() * colors.length)];
+};
+
 const ProductCard: React.FC<ProductCardProps> = ({ title, description, rating, price, image, discount }) => {
   const { t } = useTranslation();
 
-  const bg = useColorModeValue('white', 'gray.700');
+  const bg = useColorModeValue(getRandomColor(), 'gray.700');
   const color = useColorModeValue('black', 'white');
   const descriptionColor = useColorModeValue('gray.600', 'gray.400');
   const borderColor = useColorModeValue('gray.200', 'gray.600');
   const starColor = useColorModeValue('gray.300', 'gray.600');
 
   return (
-    <Box borderWidth="1px" borderRadius="lg" overflow="hidden" m="2" w="250px" bg={bg} color={color} whiteSpace="normal" borderColor={borderColor}>
+    <Box
+      borderWidth="1px"
+      borderRadius="lg"
+      overflow="hidden"
+      m="2"
+      width="250px"
+      height="350px"
+      bg={bg}
+      color={color}
+      whiteSpace="normal"
+      borderColor={borderColor}
+      display="flex"
+      flexDirection="column"
+      justifyContent="space-between"
+    >
       <Image src={image} alt={title} objectFit="cover" height="150px" width="full" />
 
-      <Box p="4">
-        <VStack align="start" spacing={2}>
+      <Box p="4" flex="1" display="flex" flexDirection="column" justifyContent="space-between">
+        <VStack align="start" spacing={2} flex="1">
           <Text fontSize="lg" fontWeight="bold" isTruncated>
             {title}
           </Text>
@@ -51,6 +70,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ title, description, rating, p
             )}
           </HStack>
         </VStack>
+        <Button colorScheme="teal" width="full" mt="2" size="sm">
+          {t('buy')}
+        </Button>
       </Box>
     </Box>
   );

@@ -105,11 +105,15 @@ i18n.use(LanguageDetector)
                 "productRating": "Rating",
                 "productPrice": "Price",
                 "productDiscount": "Discount",
-                "openProfile": "Open Profile"
+                "openProfile": "Open Profile",
+                "buy": "Buy",
+                "search": "Search"
             }
         },
         ru: {
             translation: {
+                "search": "Поиск",
+                "buy": "Купить",
                 "welcome": "Добро пожаловать в Tauri с Chakra UI!",
                 "pleaseRegisterToContinue": "Пожалуйста, зарегистрируйте аккаунт, чтобы продолжить.",
                 "clickMe": "Нажми меня",

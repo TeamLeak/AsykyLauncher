@@ -88,5 +88,65 @@
     "image": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/b/b9/Netherite_Ingot_JE2_BE2.png",
     "discount": true,
     "category": "discount"
+  },
+  {
+    "id": 10,
+    "title": "Minecraft Beacon",
+    "description": "A beacon to grant you powerful buffs.",
+    "rating": 5,
+    "price": "$50",
+    "image": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/3/3c/Beacon_JE3_BE2.png",
+    "discount": false,
+    "category": "popular"
+  },
+  {
+    "id": 11,
+    "title": "Minecraft Shulker Box",
+    "description": "A shulker box for extra storage.",
+    "rating": 4,
+    "price": "$12",
+    "image": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/2/21/Shulker_Box_JE2_BE2.png",
+    "discount": true,
+    "category": "regular"
+  },
+  {
+    "id": 12,
+    "title": "Minecraft Diamond Pick",
+    "description": "A diamond pickaxe with efficiency enchantments.",
+    "rating": 4,
+    "price": "$15",
+    "image": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/5/56/Diamond_Pickaxe_JE2_BE2.png",
+    "discount": true,
+    "category": "popular"
+  },
+  {
+    "id": 13,
+    "title": "Minecraft Trident",
+    "description": "A powerful trident with loyalty enchantments.",
+    "rating": 5,
+    "price": "$20",
+    "image": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/e/e4/Trident_JE3_BE2.png",
+    "discount": false,
+    "category": "regular"
+  },
+  {
+    "id": 14,
+    "title": "Minecraft Totem of Undy",
+    "description": "A totem to save you from death.",
+    "rating": 5,
+    "price": "$25",
+    "image": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/6/64/Totem_of_Undying_JE2_BE2.png",
+    "discount": true,
+    "category": "discount"
+  },
+  {
+    "id": 15,
+    "title": "Minecraft Nether Star",
+    "description": "A nether star for crafting beacons.",
+    "rating": 4,
+    "price": "$35",
+    "image": "https://static.wikia.nocookie.net/minecraft_gamepedia/images/d/d6/Nether_Star_JE3_BE2.png",
+    "discount": false,
+    "category": "popular"
   }
 ]

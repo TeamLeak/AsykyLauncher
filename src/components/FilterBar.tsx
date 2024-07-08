@@ -12,6 +12,7 @@ const FilterBar: React.FC<FilterBarProps> = ({ handleCategoryChange, filter }) =
   const categories = [
     { name: t('popular'), key: 'popular' },
     { name: t('discounted'), key: 'discount' },
+    { name: t('recentlyAdded'), key: 'recent' },
     { name: t('allProducts'), key: 'all' }
   ];
 
