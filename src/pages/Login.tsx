@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Box, Button, Input, FormControl, FormLabel, useToast, Divider, Text, AbsoluteCenter, Link as ChakraLink } from '@chakra-ui/react';
 import { invoke } from '@tauri-apps/api/tauri';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
@@ -6,6 +6,16 @@ import { useTranslation } from 'react-i18next';
 import { InputGroup, InputLeftElement } from '@chakra-ui/react';
 import { ArrowForwardIcon, EmailIcon, LockIcon } from "@chakra-ui/icons";
 import { open } from '@tauri-apps/api/shell';
+import { useUser } from '../context/UserContext';
+
+interface User {
+    name: string;
+    avatar: string;
+}
+
+interface Session {
+    user: User;
+}
 
 const Login = () => {
     const { t } = useTranslation();
@@ -13,12 +23,13 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
     const toast = useToast();
+    const { setUser, setIsLoading } = useUser();
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         try {
             console.log("Sending login request", { username, password });
-            const response = await invoke('authenticate_user', { username, password });
+            const response = await invoke<string>('authenticate_user', { username, password });
             console.log("Response from authenticate_user:", response);
 
             if (response === "Login successful") {
@@ -29,6 +40,14 @@ const Login = () => {
                     duration: 3000,
                     isClosable: true,
                 });
+
+                setIsLoading(true);
+                const session = await invoke<Session>('get_session_data');
+                localStorage.setItem('session', JSON.stringify(session));
+                setUser({ name: session.user.name, avatar: 'default-avatar.jpg' });
+                setTimeout(() => {
+                    setIsLoading(false);
+                }, 2000);
                 navigate('/');
             } else {
                 throw new Error("Failed to login");

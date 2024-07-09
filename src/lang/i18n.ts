@@ -8,7 +8,7 @@ i18n.use(LanguageDetector)
     resources: {
         en: {
             translation: {
-                "welcome": "Welcome to Tauri with Chakra UI!",
+                "welcome": "Welcome to AsykyLauncher!",
                 "pleaseRegisterToContinue": "Please register to continue",
                 "clickMe": "Click Me",
                 "login": "Login",
@@ -107,14 +107,16 @@ i18n.use(LanguageDetector)
                 "productDiscount": "Discount",
                 "openProfile": "Open Profile",
                 "buy": "Buy",
-                "search": "Search"
+                "search": "Search",
+                "notLoggedIn": "Not Logged in"
             }
         },
         ru: {
             translation: {
+                "notLoggedIn": "Отсутствует сессия",
                 "search": "Поиск",
                 "buy": "Купить",
-                "welcome": "Добро пожаловать в Tauri с Chakra UI!",
+                "welcome": "Добро пожаловать в AsykyLauncher!",
                 "pleaseRegisterToContinue": "Пожалуйста, зарегистрируйте аккаунт, чтобы продолжить.",
                 "clickMe": "Нажми меня",
                 "login": "Вход",

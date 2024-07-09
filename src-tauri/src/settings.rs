@@ -6,7 +6,10 @@ use crate::storage::{ensure_app_dirs, get_settings_path};
 const DEFAULT_SETTINGS: &str = r#"{
   "theme": "light",
   "notifications": true,
-  "volume": 75
+  "volume": 75,
+  "ram": 8,
+  "cache": 512,
+  "jvmArgs": ""
 }"#;
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -14,6 +17,9 @@ struct Settings {
     theme: String,
     notifications: bool,
     volume: u8,
+    ram: u16,
+    cache: u32,
+    jvmArgs: String,
 }
 
 impl Default for Settings {
@@ -66,16 +72,17 @@ pub fn get_all_settings() -> Result<HashMap<String, serde_json::Value>, String> 
         let settings: HashMap<String, serde_json::Value> = serde_json::from_str(&data).map_err(|e| e.to_string())?;
         Ok(settings)
     } else {
-        Ok(HashMap::new())
+        let default_settings: HashMap<String, serde_json::Value> = serde_json::from_str(DEFAULT_SETTINGS).map_err(|e| e.to_string())?;
+        Ok(default_settings)
     }
 }
 
 #[tauri::command]
-pub fn reset_settings() -> Result<(), String> {
+pub fn reset_settings() -> Result<HashMap<String, serde_json::Value>, String> {
     ensure_app_dirs();
     let path = get_settings_path();
     let default_settings: HashMap<String, serde_json::Value> = serde_json::from_str(DEFAULT_SETTINGS).map_err(|e| e.to_string())?;
     let data = serde_json::to_string(&default_settings).map_err(|e| e.to_string())?;
     fs::write(&path, data).map_err(|e| e.to_string())?;
-    Ok(())
+    Ok(default_settings)
 }

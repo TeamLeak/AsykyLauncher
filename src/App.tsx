@@ -10,8 +10,9 @@ import SelectPlayer from './pages/SelectPlayer';
 import Settings from './pages/Settings';
 import Store from './pages/Store';
 import Header from './components/Header';
-import Skeleton from './utils/Skeleton'; // Убедитесь, что путь правильный
+import Skeleton from './utils/Skeleton';
 import { listen } from '@tauri-apps/api/event';
+import { UserProvider } from './context/UserContext';
 
 const App: React.FC = () => {
   const { i18n } = useTranslation();
@@ -72,24 +73,26 @@ const App: React.FC = () => {
 
   return (
     <ChakraProvider>
-      <Flex direction="column" minHeight="100vh" position="relative">
-        <Header />
-        <Flex flex="1" direction="column" align="center" justify="center">
-          {(showSpinner || isThemeChanging || isLoading) ? (
-            <Skeleton />
-          ) : (
-            <Routes location={location} key={location.pathname}>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/progress" element={<Progress />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/accounts" element={<SelectPlayer />} />
-              <Route path="/settings" element={<Settings />} />
-              <Route path="/store" element={<Store />} />
-            </Routes>
-          )}
+      <UserProvider>
+        <Flex direction="column" minHeight="100vh" position="relative">
+          <Header />
+          <Flex flex="1" direction="column" align="center" justify="center">
+            {(showSpinner || isThemeChanging || isLoading) ? (
+              <Skeleton />
+            ) : (
+              <Routes location={location} key={location.pathname}>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/progress" element={<Progress />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/accounts" element={<SelectPlayer />} />
+                <Route path="/settings" element={<Settings />} />
+                <Route path="/store" element={<Store />} />
+              </Routes>
+            )}
+          </Flex>
         </Flex>
-      </Flex>
+      </UserProvider>
     </ChakraProvider>
   );
 };

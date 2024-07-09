@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
     Box,
     Flex,
@@ -24,11 +24,13 @@ import {AddIcon, CheckIcon, CloseIcon} from '@chakra-ui/icons';
 import {useTranslation} from 'react-i18next';
 import {useNavigate} from 'react-router-dom';
 import {motion} from 'framer-motion';
+import {useUser} from '../context/UserContext';
 
 const SelectPlayer: React.FC = () => {
     const {t} = useTranslation();
     const navigate = useNavigate();
     const {isOpen, onOpen, onClose} = useDisclosure();
+    const {user, isLoading} = useUser();
     const [contextMenu, setContextMenu] = useState<{
         playerId: number | null;
         playerElement: HTMLElement | null
@@ -36,6 +38,22 @@ const SelectPlayer: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [status, setStatus] = useState<'success' | 'error' | null>(null);
     const [, setAttemptCount] = useState<number>(0);
+
+    useEffect(() => {
+        if (!isLoading && !user.name) {
+            navigate('/login');
+        }
+    }, [isLoading, user, navigate]);
+
+    useEffect(() => {
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+
+        return () => {
+            document.documentElement.style.overflow = 'auto';
+            document.body.style.overflow = 'auto';
+        };
+    }, []);
 
     const players = [
         {id: 1, name: t('Player 1'), avatar: 'https://via.placeholder.com/100'},
@@ -141,6 +159,10 @@ const SelectPlayer: React.FC = () => {
         </Flex>
     );
 
+    if (isLoading) {
+        return <Spinner size="xl"/>;
+    }
+
     return (
         <motion.div
             initial={{opacity: 0}}
@@ -148,7 +170,7 @@ const SelectPlayer: React.FC = () => {
             exit={{opacity: 0}}
             transition={{duration: 0.5}}
         >
-            <Flex direction="column" align="center" justify="center" height="100vh" position="relative">
+            <Flex direction="column" align="center" justify="center" height="100vh" position="relative" overflow="hidden">
                 <Text fontSize="2xl" mb={8} fontWeight="bold">
                     {t('whoIsPlaying')}
                 </Text>

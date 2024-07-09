@@ -1,14 +1,13 @@
 // ThemeSwitcher.tsx
-import { IconButton, useColorMode, Box } from '@chakra-ui/react';
-import { Moon, Sun } from 'react-feather';
+import {Button, useColorMode, Box} from '@chakra-ui/react';
 
 interface ThemeSwitcherProps {
     onToggleStart: () => void;
     onToggleEnd: () => void;
 }
 
-const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({ onToggleStart, onToggleEnd }) => {
-    const { colorMode, toggleColorMode } = useColorMode();
+const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({onToggleStart, onToggleEnd}) => {
+    const {colorMode, toggleColorMode} = useColorMode();
 
     const handleToggle = () => {
         onToggleStart();
@@ -21,12 +20,21 @@ const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({ onToggleStart, onToggleEn
     };
 
     return (
-        <Box position="relative">
-            <IconButton
-                aria-label="Toggle theme"
-                icon={colorMode === 'light' ? <Moon /> : <Sun />}
+        <Box position="relative" display="flex" alignItems="center" gap="2">
+            <Button
                 onClick={handleToggle}
-            />
+                colorScheme={colorMode === 'dark' ? 'teal' : 'gray'}
+                variant={colorMode === 'dark' ? 'solid' : 'outline'}
+            >
+                Dark
+            </Button>
+            <Button
+                onClick={handleToggle}
+                colorScheme={colorMode === 'light' ? 'teal' : 'gray'}
+                variant={colorMode === 'light' ? 'solid' : 'outline'}
+            >
+                Light
+            </Button>
         </Box>
     );
 };
