@@ -7,40 +7,19 @@ mod settings;
 mod sessions;
 mod storage;
 mod tray;
+mod game_files_verify;
+mod minecraft_launcher;
 
 use settings::{save_setting, get_setting, get_all_settings, reset_settings};
 use sessions::{authenticate_user, validate_session, validate_jwt, regenerate_api_hash, get_session_data, kill_session, load_session};
+use crate::minecraft_launcher::ProgressState;
+use crate::minecraft_launcher::LauncherState;
 use crate::sessions::SessionState;
 use crate::tray::{create_tray, handle_tray_event};
-
-struct ProgressState {
-    progress: Arc<Mutex<u8>>,
-}
-
-#[tauri::command]
-fn login(username: String, password: String) -> String {
-    if username == "user" && password == "password" {
-        "Login successful".to_string()
-    } else {
-        "Invalid credentials".to_string()
-    }
-}
-
-#[tauri::command]
-fn update_progress(state: State<ProgressState>) -> u8 {
-    let mut progress = state.progress.lock().unwrap();
-    if *progress < 100 {
-        *progress += 10;
-    } else {
-        *progress = 0;
-    }
-    *progress
-}
 
 #[tokio::main]
 async fn main() {
     env_logger::init();
-
     info!("Logger initialized");
 
     tauri::Builder::default()
@@ -50,8 +29,11 @@ async fn main() {
         .manage(SessionState {
             session: Arc::new(Mutex::new(None)),
         })
+        .manage(LauncherState::new())
         .invoke_handler(tauri::generate_handler![
-            login,
+            create_launcher_tauri,
+            download_files,
+            launch_game,
             update_progress,
             save_setting,
             get_setting,

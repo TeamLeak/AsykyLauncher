@@ -109,7 +109,7 @@ const Login = () => {
             <Box position='relative' padding='10'>
                 <Divider />
                 <AbsoluteCenter px='4'>
-                    {t('or')}
+                     {t('or')}
                 </AbsoluteCenter>
             </Box>
 
