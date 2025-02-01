@@ -42,6 +42,27 @@ export default function Home() {
           <GithubIcon size={20} />
           GitHub
         </Link>
+        {/* Новая кнопка для перехода на логин-страницу */}
+        <Link
+          className={buttonStyles({
+            color: "secondary",
+            radius: "full",
+            variant: "shadow",
+          })}
+          href="/login"
+        >
+          Login
+        </Link>
+        <Link
+          className={buttonStyles({
+            color: "secondary",
+            radius: "full",
+            variant: "shadow",
+          })}
+          href="/register"
+        >
+          Регистрация
+        </Link>
       </div>
 
       <div className="mt-8">
