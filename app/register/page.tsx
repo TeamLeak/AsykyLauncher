@@ -29,15 +29,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black/95 flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Фоновые эффекты */}
-      <motion.div
-        animate={{ opacity: 0.1 }}
-        className="absolute inset-0 bg-gradient-to-br from-purple-900/50 to-transparent"
-        initial={{ opacity: 0 }}
-        transition={{ duration: 2 }}
-      />
-
+    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
       <div className="container mx-auto flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-16">
         {/* Блок с логотипом */}
         <motion.div
@@ -56,13 +48,6 @@ export default function RegisterPage() {
               src="/logo.svg" // Замените на ваш путь к логотипу
             />
           </div>
-
-          {/* Анимированный градиентный фон */}
-          <motion.div
-            animate={{ rotate: 360 }}
-            className="absolute top-1/2 left-1/2 w-64 h-64 -mt-32 -ml-32 bg-gradient-to-r from-purple-900/20 to-pink-900/20 rounded-full blur-3xl"
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          />
         </motion.div>
 
         {/* Форма регистрации */}
@@ -242,18 +227,6 @@ export default function RegisterPage() {
           </div>
         </motion.div>
       </div>
-
-      {/* Дополнительные эффекты */}
-      <motion.div
-        animate={{ rotate: 45 }}
-        className="absolute top-20 left-40 w-96 h-96 bg-gradient-to-r from-purple-900/30 to-pink-900/30 blur-3xl rounded-full pointer-events-none"
-        transition={{ duration: 20, repeat: Infinity, repeatType: "mirror" }}
-      />
-      <motion.div
-        animate={{ scale: [1, 1.2, 1] }}
-        className="absolute bottom-0 right-0 w-64 h-64 bg-gradient-to-tl from-purple-900/20 to-transparent blur-3xl pointer-events-none"
-        transition={{ duration: 8, repeat: Infinity }}
-      />
     </div>
   );
 }

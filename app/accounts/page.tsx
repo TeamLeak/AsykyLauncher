@@ -1,119 +1,161 @@
 "use client";
-import { motion } from "framer-motion";
-import { FiSettings, FiLogIn, FiUser } from "react-icons/fi";
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { FiPlus, FiUser } from "react-icons/fi";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { Link } from "@heroui/link";
 
 import { title } from "@/components/primitives";
 
 export default function AccountsPage() {
-  return (
-    <div className="min-h-screen bg-black/95 flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Фоновые эффекты */}
-      <motion.div
-        animate={{ opacity: 0.1 }}
-        className="absolute inset-0 bg-gradient-to-br from-blue-900/50 to-transparent"
-        initial={{ opacity: 0 }}
-        transition={{ duration: 2 }}
-      />
+  const router = useRouter();
+  const [selectedProfile, setSelectedProfile] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [profiles] = useState([
+    {
+      id: "1",
+      name: "saintedlittle",
+      avatar: "https://minotar.net/helm/saintedlittle/600.png",
+    },
+    {
+      id: "2",
+      name: "notch",
+      avatar: "https://minotar.net/helm/notch/600.png",
+    },
+  ]);
 
-      <div className="container mx-auto max-w-2xl">
-        <motion.div
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          className="bg-[#0d0d0d] p-8 rounded-3xl relative overflow-hidden border border-blue-900/50 shadow-2xl"
-          initial={{ opacity: 0, y: 50, scale: 0.95 }}
-          transition={{ type: "spring", stiffness: 120 }}
-        >
+  const handleProfileSelect = async (profileId: string) => {
+    setIsLoading(true);
+    setSelectedProfile(profileId);
+
+    // Имитация запроса к API
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      router.push("/game");
+    } catch (error) {
+      console.error("Ошибка выбора профиля:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleAddProfile = async () => {
+    setIsLoading(true);
+
+    // Имитация запроса на создание профиля
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      router.push("/login");
+    } catch (error) {
+      console.error("Ошибка создания профиля:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="relative">
+      {/* Анимация загрузки */}
+      <AnimatePresence>
+        {isLoading && (
+          <motion.div
+            animate={{ opacity: 1 }}
+            className="fixed inset-0 backdrop-blur-xl flex items-center justify-center z-50"
+            exit={{ opacity: 0 }}
+            initial={{ opacity: 0 }}
+          >
+            <motion.div
+              animate={{ rotate: 360 }}
+              className="h-20 w-20 border-4 border-purple-500 rounded-full border-t-transparent"
+              transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Основной контент */}
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="flex flex-col items-center gap-12 relative z-10">
           {/* Заголовок */}
           <motion.div
-            animate={{ y: 0, opacity: 1 }}
-            initial={{ y: -20, opacity: 0 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center space-y-6"
+            initial={{ opacity: 0, y: -20 }}
             transition={{ delay: 0.3 }}
           >
-            <h1 className={`${title({ color: "blue" })} text-3xl mb-6`}>
-              STEAM
-            </h1>
+            <h2 className={`${title({ color: "violet" })} text-4xl`}>
+              КТО ИГРАЕТ?
+            </h2>
+            <p className="text-gray-400 text-xl tracking-wide font-light">
+              Выберите или создайте игровой профиль
+            </p>
           </motion.div>
+          {/* Сетка профилей */}
+          <div className="flex items-center gap-8">
+            {profiles.map((profile) => (
+              <motion.div
+                key={profile.id}
+                className="relative group cursor-pointer"
+                whileHover="hover"
+                onClick={() => handleProfileSelect(profile.id)}
+              >
+                {/* Аватар профиля */}
+                <motion.div
+                  className="relative w-32 h-32 rounded-full border-2 border-purple-900/30 overflow-hidden shadow-xl"
+                  variants={{
+                    hover: {
+                      scale: 1.05,
+                      borderColor: "#8B5CF6",
+                      boxShadow: "0 0 30px rgba(139, 92, 246, 0.3)",
+                    },
+                  }}
+                >
+                  <Image
+                    alt={profile.name}
+                    className="grayscale group-hover:grayscale-0 transition-all brightness-125"
+                    layout="fill"
+                    objectFit="cover"
+                    src={profile.avatar}
+                  />
 
-          {/* Основной контент */}
-          <div className="space-y-6">
-            {/* Профиль */}
-            <motion.div
-              animate={{ x: 0, opacity: 1 }}
-              className="flex items-center gap-4 p-4 bg-[#151515] rounded-xl border border-blue-900/30"
-              initial={{ x: -20, opacity: 0 }}
-              transition={{ delay: 0.4 }}
+                  {/* Наложение при наведении */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-purple-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                </motion.div>
+
+                {/* Имя профиля */}
+                <motion.div
+                  className="absolute -bottom-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity"
+                  variants={{
+                    hover: { y: 5 },
+                  }}
+                >
+                  <div className="bg-black/90 px-4 py-2 rounded-full text-purple-300 text-sm font-medium tracking-wide shadow-lg">
+                    {profile.name}
+                  </div>
+                </motion.div>
+
+                {/* Индикатор выбора */}
+                {selectedProfile === profile.id && (
+                  <div className="absolute top-2 right-2 bg-purple-600 w-6 h-6 rounded-full flex items-center justify-center shadow-md">
+                    <FiUser className="text-white w-4 h-4" />
+                  </div>
+                )}
+              </motion.div>
+            ))}
+
+            {/* Кнопка добавления */}
+            <motion.button
+              className="w-32 h-32 rounded-full bg-black/30 border-2 border-dashed border-purple-900/30 flex items-center justify-center hover:border-purple-500 transition-all group"
+              disabled={isLoading}
+              whileHover={{ scale: 1.05 }}
+              onClick={handleAddProfile}
             >
-              <div className="relative h-12 w-12">
-                <Image
-                  alt="User Avatar"
-                  className="rounded-full"
-                  layout="fill"
-                  objectFit="cover"
-                  src="/steam-avatar.png"
-                />
-              </div>
-              <div>
-                <h3 className="text-lg font-medium text-gray-100">
-                  Kro_Player
-                </h3>
-                <div className="flex items-center gap-2">
-                  <div className="h-2 w-2 bg-green-500 rounded-full" />
-                  <span className="text-sm text-green-400">Kro играет?</span>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Кнопки действий */}
-            <motion.div
-              animate={{ opacity: 1 }}
-              className="grid gap-4"
-              initial={{ opacity: 0 }}
-              transition={{ delay: 0.6 }}
-            >
-              <motion.button
-                className="w-full py-3 px-6 flex items-center gap-3 bg-[#17212B] hover:bg-[#1f2a37] rounded-xl transition-all"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <FiLogIn className="text-blue-400 w-5 h-5" />
-                <span className="text-gray-100">Войти в аккаунт</span>
-              </motion.button>
-
-              <motion.button
-                className="w-full py-3 px-6 flex items-center gap-3 bg-[#17212B] hover:bg-[#1f2a37] rounded-xl transition-all"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <FiUser className="text-blue-400 w-5 h-5" />
-                <span className="text-gray-100">Сменить профиль</span>
-              </motion.button>
-
-              <motion.button
-                className="w-full py-3 px-6 flex items-center gap-3 bg-[#17212B] hover:bg-[#1f2a37] rounded-xl transition-all"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <FiSettings className="text-blue-400 w-5 h-5" />
-                <span className="text-gray-100">Настройки</span>
-              </motion.button>
-            </motion.div>
+              <FiPlus className="text-purple-500 w-12 h-12 group-hover:text-purple-400 transition-colors" />
+            </motion.button>
           </div>
-
-          {/* Декоративные элементы */}
-          <motion.div
-            animate={{ rotate: 45 }}
-            className="absolute top-1/2 left-1/2 w-64 h-64 -mt-32 -ml-32 bg-gradient-to-r from-blue-900/20 to-cyan-900/20 rounded-full blur-3xl"
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          />
-        </motion.div>
+        </div>
       </div>
-
-      {/* Дополнительные фоновые эффекты */}
-      <motion.div
-        animate={{ rotate: 360 }}
-        className="absolute top-20 left-40 w-96 h-96 bg-gradient-to-r from-blue-900/30 to-cyan-900/30 blur-3xl rounded-full pointer-events-none"
-        transition={{ duration: 20, repeat: Infinity, repeatType: "mirror" }}
-      />
     </div>
   );
 }

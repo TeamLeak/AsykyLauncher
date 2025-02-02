@@ -4,13 +4,15 @@ import { AnimatePresence, motion } from "framer-motion";
 import { FiPlus, FiUser } from "react-icons/fi";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { Link } from "@heroui/link";
+
 import { title } from "@/components/primitives";
 
-export default function AccountsPage() {
+export default function HomePage() {
   const router = useRouter();
   const [selectedProfile, setSelectedProfile] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [profiles, setProfiles] = useState([
+  const [profiles] = useState([
     {
       id: "1",
       name: "saintedlittle",
@@ -29,7 +31,7 @@ export default function AccountsPage() {
 
     // Имитация запроса к API
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       router.push("/game");
     } catch (error) {
       console.error("Ошибка выбора профиля:", error);
@@ -43,7 +45,7 @@ export default function AccountsPage() {
 
     // Имитация запроса на создание профиля
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       router.push("/login");
     } catch (error) {
       console.error("Ошибка создания профиля:", error);
@@ -58,15 +60,15 @@ export default function AccountsPage() {
       <AnimatePresence>
         {isLoading && (
           <motion.div
-            initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
             className="fixed inset-0 backdrop-blur-xl flex items-center justify-center z-50"
+            exit={{ opacity: 0 }}
+            initial={{ opacity: 0 }}
           >
             <motion.div
               animate={{ rotate: 360 }}
-              transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
               className="h-20 w-20 border-4 border-purple-500 rounded-full border-t-transparent"
+              transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
             />
           </motion.div>
         )}
@@ -89,6 +91,9 @@ export default function AccountsPage() {
               Выберите или создайте игровой профиль
             </p>
           </motion.div>
+          <Link href={"/settings"}>Настройки</Link>
+          <Link href={"/register"}>Регистрация</Link>
+          <Link href={"/login"}>Вход</Link>
 
           {/* Сетка профилей */}
           <div className="flex items-center gap-8">
@@ -146,9 +151,9 @@ export default function AccountsPage() {
             {/* Кнопка добавления */}
             <motion.button
               className="w-32 h-32 rounded-full bg-black/30 border-2 border-dashed border-purple-900/30 flex items-center justify-center hover:border-purple-500 transition-all group"
+              disabled={isLoading}
               whileHover={{ scale: 1.05 }}
               onClick={handleAddProfile}
-              disabled={isLoading}
             >
               <FiPlus className="text-purple-500 w-12 h-12 group-hover:text-purple-400 transition-colors" />
             </motion.button>
