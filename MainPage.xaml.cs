@@ -1,7 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-using System;
-using System.Threading.Tasks;
-using MauiApp3.Services.Providers;
+﻿using MauiApp3.Services.Providers;
 
 namespace MauiApp3
 {
