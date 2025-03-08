@@ -27,7 +27,7 @@ namespace MauiApp3
             var sessionManager = SessionProvider.GetSessionManager();
             string? jwt = sessionManager.GetSession();
 
-            if (!string.IsNullOrEmpty(jwt) && MainPage.ValidateSession(jwt))
+            if (!string.IsNullOrEmpty(jwt) && ValidateSession(jwt))
             {
                 await NavigateToMain();
             }
