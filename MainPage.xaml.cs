@@ -1,6 +1,7 @@
 ﻿using Microsoft.Maui.Controls;
 using System;
 using System.Threading.Tasks;
+using MauiApp3.Services.Providers;
 
 namespace MauiApp3
 {
@@ -12,12 +13,30 @@ namespace MauiApp3
         {
             InitializeComponent();
             SetupControls();
+            CheckSession();
         }
 
         private void SetupControls()
         {
             UsernameEntry.TextChanged += (s, e) => ClearError();
             PasswordEntry.TextChanged += (s, e) => ClearError();
+        }
+
+        private async void CheckSession()
+        {
+            var sessionManager = SessionProvider.GetSessionManager();
+            string? jwt = sessionManager.GetSession();
+
+            if (!string.IsNullOrEmpty(jwt) && ValidateSession(jwt))
+            {
+                await NavigateToMain();
+            }
+        }
+
+        private bool ValidateSession(string jwt)
+        {
+            // Здесь можно добавить проверку на срок действия JWT
+            return true; // Пока просто пропускаем без проверки
         }
 
         private async void OnLoginClicked(object sender, EventArgs e)
@@ -51,6 +70,10 @@ namespace MauiApp3
             await Task.Delay(800);
             StatusLabel.Text = "Проверяю данные...";
             await Task.Delay(1200);
+
+            // Создание сессии
+            var sessionManager = SessionProvider.GetSessionManager();
+            sessionManager.CreateSession("your.jwt.token");
 
             // Успешный вход
             await NavigateToMain();
