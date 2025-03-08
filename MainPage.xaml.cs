@@ -27,13 +27,13 @@ namespace MauiApp3
             var sessionManager = SessionProvider.GetSessionManager();
             string? jwt = sessionManager.GetSession();
 
-            if (!string.IsNullOrEmpty(jwt) && ValidateSession(jwt))
+            if (!string.IsNullOrEmpty(jwt) && MainPage.ValidateSession(jwt))
             {
                 await NavigateToMain();
             }
         }
 
-        private bool ValidateSession(string jwt)
+        private static bool ValidateSession(string jwt)
         {
             // Здесь можно добавить проверку на срок действия JWT
             return true; // Пока просто пропускаем без проверки
