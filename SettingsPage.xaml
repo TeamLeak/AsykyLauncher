@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiApp3.SettingsPage"
+             Title="SettingsPage">
+    <ScrollView>
+        <StackLayout Padding="20" Spacing="15">
+
+            <Label Text="Выделенная ОЗУ (MB):" FontSize="Medium"/>
+            <Slider x:Name="RamSlider" Minimum="512" Maximum="8192" Value="2048" />
+            <Label Text="{Binding Source={x:Reference RamSlider}, Path=Value, StringFormat='{0:F0} MB'}" HorizontalOptions="Center"/>
+
+            <Label Text="Выбор сборки:" FontSize="Medium"/>
+            <Button Text="Сборка 1"/>
+            <Button Text="Сборка 2"/>
+            <Button Text="Сборка 3"/>
+
+            <Label Text="Добавить параметр JVM:" FontSize="Medium"/>
+            <Entry x:Name="NewJvmParamEntry" Placeholder="Введите новый параметр JVM"/>
+
+            <Button Text="Добавить" Clicked="BtnAddJvmParam_Clicked"/>
+
+            <Label Text="Активные параметры JVM:" FontSize="Medium"/>
+            <ListView x:Name="JvmParamsListView">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="{Binding .}" VerticalOptions="Center"/>
+                                <Button Text="Удалить" Clicked="BtnRemJvmParam_Clicked" Margin="10,0,0,0" BackgroundColor="Red" TextColor="White"/>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+        </StackLayout>
+    </ScrollView>
+</ContentPage>
