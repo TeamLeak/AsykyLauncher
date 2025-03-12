@@ -7,32 +7,70 @@
         <StackLayout Padding="20" Spacing="15">
 
             <Label Text="Выделенная ОЗУ (MB):" FontSize="Medium"/>
-            <Slider x:Name="RamSlider" Minimum="512" Maximum="8192" Value="2048" />
+            <Slider x:Name="RamSlider" Minimum="512" Maximum="8192"/>
             <Label Text="{Binding Source={x:Reference RamSlider}, Path=Value, StringFormat='{0:F0} MB'}" HorizontalOptions="Center"/>
 
             <Label Text="Выбор сборки:" FontSize="Medium"/>
             <Button Text="Сборка 1"/>
             <Button Text="Сборка 2"/>
-            <Button Text="Сборка 3"/>
 
-            <Label Text="Добавить параметр JVM:" FontSize="Medium"/>
-            <Entry x:Name="NewJvmParamEntry" Placeholder="Введите новый параметр JVM"/>
+            <Grid VerticalOptions="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
-            <Button Text="Добавить" Clicked="BtnAddJvmParam_Clicked"/>
+                <Label Text="Добавить параметр JVM:" 
+                       FontSize="Medium" 
+                       VerticalOptions="Center" 
+                       Grid.Column="0"
+                       Margin="0,0,5,0"/>
+
+                <Entry x:Name="NewJvmParamEntry" 
+                       Placeholder="Введите новый параметр JVM" 
+                       VerticalOptions="Center" 
+                       Grid.Column="1"/>
+
+                <Button Text="+" 
+                        Clicked="BtnAddJvmParam_Clicked" 
+                        VerticalOptions="Center" 
+                        Grid.Column="2"
+                        Margin="5,0,0,0"/>
+            </Grid>
 
             <Label Text="Активные параметры JVM:" FontSize="Medium"/>
-            <ListView x:Name="JvmParamsListView">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="{Binding .}" VerticalOptions="Center"/>
-                                <Button Text="Удалить" Clicked="BtnRemJvmParam_Clicked" Margin="10,0,0,0" BackgroundColor="Red" TextColor="White"/>
-                            </StackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+            <ScrollView HorizontalOptions="FillAndExpand">
+                <FlexLayout x:Name="JvmParamsFlexLayout"
+                                    BindableLayout.ItemsSource="{Binding JvmParams}"
+                                    Wrap="Wrap"
+                                    Direction="Row"
+                                    JustifyContent="Start"
+                                    AlignItems="Start"
+                                    AlignContent="Start">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Text="{Binding .}" 
+                                       VerticalOptions="Center" 
+                                       Grid.Column="0"/>
+                                <Button Text="X" 
+                                        Clicked="BtnRemJvmParam_Clicked" 
+                                        Margin="10,0,0,0" 
+                                        BackgroundColor="Red" 
+                                        TextColor="White" 
+                                        VerticalOptions="Center"
+                                        Grid.Column="1"
+                                        BindingContext="{Binding .}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </FlexLayout>
+            </ScrollView>
 
         </StackLayout>
     </ScrollView>
