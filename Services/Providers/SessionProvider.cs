@@ -1,8 +1,11 @@
 ﻿namespace MauiApp3.Services.Providers
 {
-    public class SessionProvider
+    public static class SessionProvider
     {
-        private static readonly SessionManager _sessionManager = new(FileManager.SessionsPath + "/session.dat", "your-secret-key-123");
+        private static readonly SessionManager _sessionManager = new(
+            FileManager.SessionsPath + "/session.dat",
+            "your-secret-key-123"
+        );
 
         public static SessionManager GetSessionManager() => _sessionManager;
     }

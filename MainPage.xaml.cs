@@ -69,8 +69,8 @@ namespace MauiApp3
             await Task.Delay(1200);
 
             // Создание сессии
-            var sessionManager = SessionProvider.GetSessionManager();
-            sessionManager.CreateSession("your.jwt.token");
+            //var sessionManager = SessionProvider.GetSessionManager();
+            //sessionManager.CreateSession("your.jwt.token");
 
             // Успешный вход
             await NavigateToMain();
@@ -113,9 +113,9 @@ namespace MauiApp3
             await LoginButton.ScaleTo(1, 200);
             await Content.FadeTo(0, 400);
 
-            //var mainPage = new MainGamePage();
-            //await Navigation.PushAsync(mainPage);
-            //Navigation.RemovePage(this);
+            var mainPage = new SettingsPage();
+            await Navigation.PushAsync(mainPage);
+            Navigation.RemovePage(this);
         }
     }
 }

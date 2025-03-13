@@ -1,77 +1,154 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MauiApp3.SettingsPage"
-             Title="SettingsPage">
-    <ScrollView>
-        <StackLayout Padding="20" Spacing="15">
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="MauiApp3.SettingsPage"
+    Title="Настройки"
+    BackgroundColor="Black">
 
-            <Label Text="Выделенная ОЗУ (MB):" FontSize="Medium"/>
-            <Slider x:Name="RamSlider" Minimum="512" Maximum="8192"/>
-            <Label Text="{Binding Source={x:Reference RamSlider}, Path=Value, StringFormat='{0:F0} MB'}" HorizontalOptions="Center"/>
+    <Grid RowDefinitions="*,Auto,*" ColumnDefinitions="*,Auto,*">
+        <!-- Основной контейнер в центре -->
+        <Frame Grid.Row="1" Grid.Column="1"
+               Padding="40"
+               CornerRadius="30"
+               HasShadow="True"
+               WidthRequest="600">
+            <!-- Градиентный фон -->
+            <Frame.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#12001E" Offset="0.0" />
+                    <GradientStop Color="#1E0030" Offset="1.0" />
+                </LinearGradientBrush>
+            </Frame.Background>
+            <ScrollView>
+                <VerticalStackLayout Spacing="30">
+                    <!-- Заголовок страницы -->
+                    <Label Text="Настройки приложения" 
+                           FontSize="32" 
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalOptions="Center"/>
+                    <BoxView HeightRequest="2" BackgroundColor="#3A0B4D" HorizontalOptions="Fill"/>
 
-            <Label Text="Выбор сборки:" FontSize="Medium"/>
-            <Button Text="Сборка 1"/>
-            <Button Text="Сборка 2"/>
+                    <!-- Секция памяти -->
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Выделенная ОЗУ (MB):" 
+                               FontSize="20" 
+                               TextColor="White"/>
+                        <Slider x:Name="RamSlider" 
+                                Minimum="512" 
+                                Maximum="8192"
+                                ThumbColor="#4B0082"
+                                MinimumTrackColor="#4B0082"
+                                MaximumTrackColor="#3A0B4D"/>
+                        <Label Text="{Binding Source={x:Reference RamSlider}, Path=Value, StringFormat='{0:F0} MB'}" 
+                               FontSize="18"
+                               TextColor="White"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
 
-            <Grid VerticalOptions="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+                    <!-- Секция сборок -->
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Выбор сборки:" 
+                               FontSize="20" 
+                               TextColor="White"/>
+                        <HorizontalStackLayout Spacing="20" HorizontalOptions="Center">
+                            <Button x:Name="Build1Button" 
+                                    Text="Сборка 1" 
+                                    Clicked="BtnBuild1_Clicked"
+                                    BackgroundColor="#4B0082"
+                                    TextColor="White" 
+                                    CornerRadius="20"
+                                    Padding="15,10"/>
+                            <Button x:Name="Build2Button" 
+                                    Text="Сборка 2" 
+                                    Clicked="BtnBuild2_Clicked"
+                                    BackgroundColor="#3A0B4D"
+                                    TextColor="White" 
+                                    CornerRadius="20"
+                                    Padding="15,10"/>
+                        </HorizontalStackLayout>
+                        <Label x:Name="ActiveBuildLabel" 
+                               Text="Активная сборка: Сборка 1" 
+                               FontSize="18" 
+                               TextColor="White" 
+                               HorizontalOptions="Center"/>
+                        <Label x:Name="BuildDescriptionLabel" 
+                               Text="Описание сборки: Оптимизирована для стабильной работы." 
+                               FontSize="16"
+                               TextColor="#665577"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
 
-                <Label Text="Добавить параметр JVM:" 
-                       FontSize="Medium" 
-                       VerticalOptions="Center" 
-                       Grid.Column="0"
-                       Margin="0,0,5,0"/>
-
-                <Entry x:Name="NewJvmParamEntry" 
-                       Placeholder="Введите новый параметр JVM" 
-                       VerticalOptions="Center" 
-                       Grid.Column="1"/>
-
-                <Button Text="+" 
-                        Clicked="BtnAddJvmParam_Clicked" 
-                        VerticalOptions="Center" 
-                        Grid.Column="2"
-                        Margin="5,0,0,0"/>
-            </Grid>
-
-            <Label Text="Активные параметры JVM:" FontSize="Medium"/>
-            <ScrollView HorizontalOptions="FillAndExpand">
-                <FlexLayout x:Name="JvmParamsFlexLayout"
-                                    BindableLayout.ItemsSource="{Binding JvmParams}"
-                                    Wrap="Wrap"
-                                    Direction="Row"
-                                    JustifyContent="Start"
-                                    AlignItems="Start"
-                                    AlignContent="Start">
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <Label Text="{Binding .}" 
-                                       VerticalOptions="Center" 
-                                       Grid.Column="0"/>
-                                <Button Text="X" 
-                                        Clicked="BtnRemJvmParam_Clicked" 
-                                        Margin="10,0,0,0" 
-                                        BackgroundColor="Red" 
-                                        TextColor="White" 
-                                        VerticalOptions="Center"
-                                        Grid.Column="1"
-                                        BindingContext="{Binding .}"/>
-                            </Grid>
-                        </DataTemplate>
-                    </BindableLayout.ItemTemplate>
-                </FlexLayout>
+                    <!-- Секция JVM параметров -->
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="JVM параметры:" 
+                               FontSize="20" 
+                               TextColor="White"/>
+                        <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
+                            <Entry x:Name="NewJvmParamEntry"
+                                   Placeholder="Введите новый параметр JVM"
+                                   BackgroundColor="#1E0030"
+                                   TextColor="White"
+                                   PlaceholderColor="#665577"
+                                   Margin="12"
+                                   />
+                            <Button Text="Добавить" 
+                                    Clicked="BtnAddJvmParam_Clicked"
+                                    BackgroundColor="#4B0082"
+                                    TextColor="White"
+                                    Margin="10,0,0,0"
+                                    FontSize="18"
+                                    Grid.Column="1"/>
+                        </Grid>
+                        <ScrollView Orientation="Horizontal" HeightRequest="80">
+                            <FlexLayout x:Name="JvmParamsFlexLayout"
+                                        BindableLayout.ItemsSource="{Binding JvmParams}"
+                                        Wrap="NoWrap"
+                                        AlignItems="Center"
+                                        JustifyContent="Start"
+                                        Padding="10">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <Frame Padding="8"
+                                               Margin="0"
+                                               BackgroundColor="#1E0030"
+                                               BorderColor="#3A0B4D"
+                                               CornerRadius="20"
+                                               HasShadow="True">
+                                            <Grid ColumnDefinitions="Auto,Auto" VerticalOptions="Center">
+                                                <Label Text="{Binding .}" 
+                                                       TextColor="White" 
+                                                       VerticalOptions="Center"
+                                                       Margin="5,0"/>
+                                                <Button Text="X" 
+                                                        Clicked="BtnRemJvmParam_Clicked"
+                                                        BackgroundColor="Red"
+                                                        TextColor="White"
+                                                        FontAttributes="Bold"
+                                                        VerticalOptions="Center"
+                                                        Margin="10,0,5,0"
+                                                        Grid.Column="1"
+                                                        BindingContext="{Binding .}"
+                                                        CornerRadius="15"/>
+                                            </Grid>
+                                        </Frame>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </FlexLayout>
+                        </ScrollView>
+                    </VerticalStackLayout>
+                    <!-- Кнопка сброса настроек -->
+                    <Button Text="Сбросить настройки по умолчанию"
+                            Clicked="ResetSettings_Clicked"
+                            BackgroundColor="DarkRed"
+                            TextColor="White"
+                            CornerRadius="20"
+                            Padding="15,10"
+                            HorizontalOptions="Center"/>
+                </VerticalStackLayout>
             </ScrollView>
+        </Frame>
 
-        </StackLayout>
-    </ScrollView>
+    </Grid>
 </ContentPage>
